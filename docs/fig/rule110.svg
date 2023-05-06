@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"  standalone="no"?>
+<svg 
+ width="700" height="373"
+ viewBox="0 0 700 373"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+
+<title>Gnuplot</title>
+<desc>Produced by GNUPLOT 5.4 patchlevel 5 </desc>
+
+<g id="gnuplot_canvas">
+
+<rect x="0" y="0" width="700" height="373" fill="none"/>
+<defs>
+
+	<circle id='gpDot' r='0.5' stroke-width='0.5' stroke='currentColor'/>
+	<path id='gpPt0' stroke-width='0.222' stroke='currentColor' d='M-1,0 h2 M0,-1 v2'/>
+	<path id='gpPt1' stroke-width='0.222' stroke='currentColor' d='M-1,-1 L1,1 M1,-1 L-1,1'/>
+	<path id='gpPt2' stroke-width='0.222' stroke='currentColor' d='M-1,0 L1,0 M0,-1 L0,1 M-1,-1 L1,1 M-1,1 L1,-1'/>
+	<rect id='gpPt3' stroke-width='0.222' stroke='currentColor' x='-1' y='-1' width='2' height='2'/>
+	<rect id='gpPt4' stroke-width='0.222' stroke='currentColor' fill='currentColor' x='-1' y='-1' width='2' height='2'/>
+	<circle id='gpPt5' stroke-width='0.222' stroke='currentColor' cx='0' cy='0' r='1'/>
+	<use xlink:href='#gpPt5' id='gpPt6' fill='currentColor' stroke='none'/>
+	<path id='gpPt7' stroke-width='0.222' stroke='currentColor' d='M0,-1.33 L-1.33,0.67 L1.33,0.67 z'/>
+	<use xlink:href='#gpPt7' id='gpPt8' fill='currentColor' stroke='none'/>
+	<use xlink:href='#gpPt7' id='gpPt9' stroke='currentColor' transform='rotate(180)'/>
+	<use xlink:href='#gpPt9' id='gpPt10' fill='currentColor' stroke='none'/>
+	<use xlink:href='#gpPt3' id='gpPt11' stroke='currentColor' transform='rotate(45)'/>
+	<use xlink:href='#gpPt11' id='gpPt12' fill='currentColor' stroke='none'/>
+	<path id='gpPt13' stroke-width='0.222' stroke='currentColor' d='M0,1.330 L1.265,0.411 L0.782,-1.067 L-0.782,-1.076 L-1.265,0.411 z'/>
+	<use xlink:href='#gpPt13' id='gpPt14' fill='currentColor' stroke='none'/>
+	<filter id='textbox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>
+	  <feFlood flood-color='white' flood-opacity='1' result='bgnd'/>
+	  <feComposite in='SourceGraphic' in2='bgnd' operator='atop'/>
+	</filter>
+	<filter id='greybox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>
+	  <feFlood flood-color='lightgrey' flood-opacity='1' result='grey'/>
+	  <feComposite in='SourceGraphic' in2='grey' operator='atop'/>
+	</filter>
+</defs>
+<g fill="none" color="white" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,67.07 L81.53,67.07 M674.82,67.07 L665.82,67.07  '/>	<g transform="translate(64.14,70.97)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 0</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,114.12 L81.53,114.12 M674.82,114.12 L665.82,114.12  '/>	<g transform="translate(64.14,118.02)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 20</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,161.18 L81.53,161.18 M674.82,161.18 L665.82,161.18  '/>	<g transform="translate(64.14,165.08)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 40</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,208.23 L81.53,208.23 M674.82,208.23 L665.82,208.23  '/>	<g transform="translate(64.14,212.13)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 60</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,255.29 L81.53,255.29 M674.82,255.29 L665.82,255.29  '/>	<g transform="translate(64.14,259.19)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 80</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,302.34 L81.53,302.34 M674.82,302.34 L665.82,302.34  '/>	<g transform="translate(64.14,306.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text><tspan font-family="Arial" > 100</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,302.34 L72.53,293.34 M72.53,67.07 L72.53,76.07  '/>	<g transform="translate(72.53,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 0</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M190.16,302.34 L190.16,293.34 M190.16,67.07 L190.16,76.07  '/>	<g transform="translate(190.16,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 50</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M307.80,302.34 L307.80,293.34 M307.80,67.07 L307.80,76.07  '/>	<g transform="translate(307.80,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 100</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M425.43,302.34 L425.43,293.34 M425.43,67.07 L425.43,76.07  '/>	<g transform="translate(425.43,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 150</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M543.07,302.34 L543.07,293.34 M543.07,67.07 L543.07,76.07  '/>	<g transform="translate(543.07,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 200</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M660.70,302.34 L660.70,293.34 M660.70,67.07 L660.70,76.07  '/>	<g transform="translate(660.70,324.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" > 250</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,67.07 L72.53,302.34 L674.82,302.34 L674.82,67.07 L72.53,67.07 Z  '/></g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<g transform="translate(19.18,184.71) rotate(270)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" >iterations</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<g transform="translate(373.67,351.24)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" >space</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+	<g id="gnuplot_plot_1" ><title>$data nonuniform matrix u ($1+0.5):($2+0.5):3</title>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<g transform="translate(607.09,88.97)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="end">
+		<text>$data nonuniform matrix u ($1+0.5):($2+0.5):3</text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+<image x='72.53' y='67.07' width='602.29' height='235.27' preserveAspectRatio='none' xlink:href='data:image/png;base64,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'/>
+</g>
+	</g>
+<g fill="none" color="white" stroke="rgb(148,   0, 211)" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="black" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='black'  d='M72.53,67.07 L72.53,302.34 L674.82,302.34 L674.82,67.07 L72.53,67.07 Z  '/></g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<g transform="translate(373.67,43.97)" stroke="none" fill="black" font-family="Arial" font-size="12.00"  text-anchor="middle">
+		<text><tspan font-family="Arial" >rule 110</tspan></text>
+	</g>
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+</g>
+</svg>
+

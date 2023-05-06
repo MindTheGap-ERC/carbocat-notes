@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mind-the-gap"
+version = "0.1.0"
+description = "Env for building docs"
+authors = ["Johan Hidding <j.hidding@esciencecenter.nl>"]
+license = "Apache 2"
+readme = "README.md"
+packages = [{include = "mind_the_gap"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+mkdocs = "^1.4.3"
+mkdocs-material = "^9.1.9"
+mkdocs-entangled-plugin = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
