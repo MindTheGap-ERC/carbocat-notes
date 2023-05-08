@@ -1,5 +1,4 @@
 site_name: Notes on Mind the Gap
-author: Johan Hidding
 
 plugins:
   - entangled

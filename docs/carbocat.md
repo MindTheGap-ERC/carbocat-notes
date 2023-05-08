@@ -253,18 +253,49 @@ To understand, the shape of the production rate as a function of depth looks lik
 
 ![](fig/tanh.svg)
 
-Notice that the numbers inside the exponential need to be unit-free, so does the output. The value of $\tanh \circ \exp$ at a depth of 0 is $0.7615\dots$. This does not make much sense, as I believe we should start at a value of 1 at the surface. Such a factor could be included in the $g_m$ parameter though.
+Notice that the numbers inside the exponential need to be unit-free, so does the output. The value of $\tanh \circ \exp$ at a depth of 0 is $0.7615\dots$. This does not make much sense, as I believe we should start at a value of 1 at the surface. By setting $I_0 / I_k$ to some value $>1$ this can be alleviated, but it changes the interpretation of the constants a little. The idea is that above a certain insolation, light is not the limiting factor to the rate of photosynthesis.
+
+To reproduce Figure 2 in B13, I had to change the values for $g_m$ to 500, 250, and 125 respectively, the other values from Table 2 remained the same. I guess this was done for illustration purposes.
+
+![](fig/burgess2013-fig2.svg)
 
 <details><summary>Plotting code</summary>
 
 ``` {.gnuplot file=src/figures/plot-tanh.gnuplot}
-set term svg
-set xrange [-1:10]
-plot tanh(exp(-x))
+set term svg size 700, 300 font "sans serif, 14" linewidth 1.5
+set xrange [-5:10]
+set yrange [-0.1:1.1]
+set grid
+set key outside
+set xlabel "x"
+set ylabel "y"
+plot tanh(exp(-x)) lc rgb 'black', tanh(exp(4)*exp(-x)), tanh(exp(-0.5*x))
+```
+
+``` {.gnuplot file=src/figures/burgess2013-fig2.gnuplot}
+set term svg size 500, 600 font "sans serif,14" linewidth 1.5
+set trange [0:100]
+set yrange [100:0]
+set xrange [-20:520]
+set parametric
+set key right bottom
+set grid
+set ylabel "Water depth (m)"
+set xlabel "Production rates"
+plot 500*tanh(6.7 * exp(-0.8 * t)), t title 'Carbonate factory 1', \
+     250*tanh(6.7 * exp(-0.1 * t)), t title 'Carbonate factory 2', \
+     125*tanh(6.7 * exp(-0.005 * t)), t title 'Carbonate factory 3'
 ```
 
 ``` {.make .build-artifact #plot-tanh}
 .RECIPEPREFIX = >
+.PHONY: all
+
+all: docs/fig/burgess2013-fig2.svg docs/fig/tanh.svg
+
+docs/fig/burgess2013-fig2.svg: src/figures/burgess2013-fig2.gnuplot
+> @mkdir -p $(@D)
+> gnuplot $< > $@
 
 docs/fig/tanh.svg: src/figures/plot-tanh.gnuplot
 > @mkdir -p $(@D)
@@ -272,3 +303,45 @@ docs/fig/tanh.svg: src/figures/plot-tanh.gnuplot
 ```
 
 </details>
+
+
+
+
+### Crowding
+In crowded areas carbonate production rates are reduced. For cells where
+
+$$n_{min} \le n \le n_{opt}$$
+
+and
+
+$$n_{opt} \le n \le n_{max}$$
+
+($n_{min}$ and $n_{max}$ for living cells are 4 and 10)
+
+we have a linear increase and linear decrease of production rate (i.e. a triangle function).
+
+### Transport
+The sediment that is produced is distributed into lower lying neighbour cells that are not occupied by a producer. A user defined fraction of sediment from a producer is transported, first divided equally to lower neighbours, cascading to its neighbours by splitting in half and so on. The cascade stops when the sediment reaches a minimal threshold.
+
+Thus, this step has two free parameters: the transported fraction of produced carbonate and the lower threshold.
+
+Apparent from the illustration in B13 Figure 4, a 8-cell neighbourhood is used. Nothing is mentioned about the order in which the transport is computed. We may tag transported sediment with a bit flip and assign a new lythofacies to transported sediment.
+
+### Subsidence
+Subsidence refers to gradual lowering or lifting of the underlying floor bed. This could be either sea level rise due to climate change, but also tectonic activity. Sea level also changes according to a given recipe with say three sinusoidals (e.g. Milankovich cycles). When a cell gets "subaerial exposure", i.e. the water level drops below the cell elevation (stupid jargon), accumulation stops and the cell becomes dormant. On reflooding, the cell resumes activity. From the text it is not entirely clear, but I think deactivated cells don't take part in the CA, so they count as dead neighbours.
+
+- [reference on accommodation](http://strata.uga.edu/sequence/accommodation.html), also links to a model called [SedFlux](https://github.com/mcflugen/sedflux).
+
+$$T + E = S + W$$
+
+Saying Tectonic subsidence plus Eustatic sea-level change equals Sedimentation plus change in Water depth.
+
+
+### Steps
+
+1. Update waterdepth, given subsidence
+2. Update sea level elevation, given eustatics
+3. Run CA
+4. Compute thickness of carbonate production
+5. Compute sediment transport
+
