@@ -1,4 +1,5 @@
 # Exercises: Basics
+Exercises for Mathematical Methods EDS, chapter 2.
 
 ## Matrix Algebra
 

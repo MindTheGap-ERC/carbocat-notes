@@ -1,12 +1,12 @@
 # Notes
 
-These are notes and exercise solutions. I program in Julia.
+These are project notes and exercises.
 
 ``` {.julia file=src/MindTheGap.jl}
 module MindTheGap
 
 include("./Stencil.jl")
-include("./BurgessCA.jl")
+include("./Burgess2013.jl")
 
 end
 ```

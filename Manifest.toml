@@ -48,7 +48,7 @@ version = "1.6.0"
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.GnuplotLite]]
-git-tree-sha1 = "25a20c9208671e4e9b871d0df1f32ab81b71e304"
+git-tree-sha1 = "3e0beccf7af7de41d22b835e6251944105a0e90f"
 repo-rev = "main"
 repo-url = "/mnt/data/Zijpaadjes/GnuplotLite.jl"
 uuid = "d23aac74-fdd5-4749-9733-a7e65d8a2269"

@@ -1,4 +1,5 @@
-site_name: Notes on Mathematical Modeling of Earth Dynamic Systems
+site_name: Notes on Mind the Gap
+author: Johan Hidding
 
 plugins:
   - entangled

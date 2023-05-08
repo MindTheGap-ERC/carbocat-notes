@@ -3,7 +3,7 @@
 module MindTheGap
 
 include("./Stencil.jl")
-include("./BurgessCA.jl")
+include("./Burgess2013.jl")
 
 end
 # ~\~ end

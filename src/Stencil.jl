@@ -16,7 +16,7 @@ function offset_value(::Type{Periodic{dim}}, z::AbstractArray, i::CartesianIndex
 end
 
 function offset_value(::Type{Reflected{dim}}, z::AbstractArray{T, dim}, i::CartesianIndex, Δi::CartesianIndex) where {T, dim}
-    clip(i, a, b) = (i < a ? 2a - i : (i > b ? 2b - i : i))
+    clip(i, a, b) = (i < a ? a + a - i : (i > b ? b + b - i : i))
     z[clip.(Tuple(i + Δi), ones(Int, dim), size(z))...]
 end
 
@@ -31,14 +31,14 @@ function stencil(::Type{T}, ::Type{BT}, n::NTuple{dim,Int}, f::Function) where {
     stencil_shape = range.(.-m, m)
     stencil = zeros(T, n)
 
-    function(z_in::AbstractArray{T, dim}, z_out::AbstractArray{T, dim})
+    function(z_in::AbstractArray{T, dim}, z_out::AbstractArray{T, dim}, args...)
         @assert (size(z_in) == size(z_out)) "sizes of arrays need to be equal"
         shape = size(z_in)
         for i in CartesianIndices(shape)
             for (k, Δi) in enumerate(CartesianIndices(stencil_shape))
                 stencil[k] = offset_value(BT, z_in, i, Δi)
             end
-            z_out[i] = f(stencil)
+            z_out[i] = f(stencil, args...)
         end
     end
 end
