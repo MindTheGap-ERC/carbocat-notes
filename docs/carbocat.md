@@ -4,11 +4,33 @@ CarboCAT is primarily based on a very simple cellular automaton (CA). We may exp
 ``` {.julia file=src/Burgess2013.jl}
 module Burgess2013
 
+include("Burgess2013/Config.jl")
 include("Burgess2013/CA.jl")
+include("Burgess2013/Production.jl")
 
 end
 ```
 
+``` {.julia file=src/Burgess2013/Config.jl}
+module Config
+
+struct Species
+    viability_range::Tuple{Int, Int}
+    activation_range::Tuple{Int, Int}
+
+    maximum_growth_rate::Float64
+    extinction_coefficient::Float64
+    saturation_intensity::Float64
+end
+
+Iₖ(s::Species) = s.saturation_intensity
+k(s::Species) = s.extinction_coefficient
+gₘ(s::Species) = s.maximum_growth_rate
+
+end
+```
+
+## Cellular Automaton
 The paper talks about cycling the order of preference for occupying an empty cell at each iteration. This means that the rules change slighly every iteration.
 
 ``` {.julia #cycle-permutation}
@@ -83,6 +105,7 @@ On my laptop I can run about 150 iterations per second with current code. When u
 ``` {.julia file=src/figures/ca.jl}
 using MindTheGap.Burgess2013.CA
 using MindTheGap.Stencil: Reflected
+using MindTheGap.Utility
 using GnuplotLite
 
 function plot_array(w::Int, h::Int, msgs; xtics="set xtics", ytics="set ytics")
@@ -147,38 +170,6 @@ function plot(output::String)
     end
 end
 
-struct Select
-    iter
-    selection
-end
-
-function select(it, sel)
-    Select(enumerate(it), sel)
-end
-
-function Base.iterate(s::Select)
-    x = iterate(s.selection)
-    if x !== nothing
-        (idx, selstate) = x
-        ((_, value), rest) = Iterators.peel(Iterators.dropwhile(((i, y),) -> i != idx, s.iter))
-        return (value, (selstate, rest))
-    else
-        return nothing
-    end
-end
-
-function Base.iterate(s::Select, state)
-    (selstate, rest) = state
-    x = iterate(s.selection, selstate)
-    if x !== nothing
-        (idx, selstate) = x
-        ((_, value), rest) = Iterators.peel(Iterators.dropwhile(((i, y),) -> i != idx, s.iter))
-        return (value, (selstate, rest))
-    else
-        return nothing
-    end
-end
-
 function plot_long_times(output::String)
     init = rand(0:3, 50, 50)
     result = select(CA.run(Reflected{2}, init, 3), [10, 100, 1000])
@@ -216,13 +207,19 @@ docs/fig/burgess2013-long-times.svg: src/figures/ca.jl
 
 </details>
 
-### Carbonate production
+## Carbonate production
 Each species in the CA produces a form of carbonate. We may assume a one-to-one correspondence between coral species and a carbonate type (lythofacies). The assumption is made that the carbonate production depends on the water depth as (Bosscher and Schlager 1992),
 
 $$g = g_m {\rm tanh}\left({{I_0 e^{-kw}} \over {I_k}}\right),$$
 
 where $w$ is the water depth in meters, $g_m$ is the maximum growth rate in ${\rm m}\ {\rm My}^-1$, $I_0$ is surface light intensity, $I_k$ is saturation light intensity, and $k$ is the extinction coefficient.
 
+``` {.julia #carbonate-production}
+g(gₘ, I₀, Iₖ, k, w) = gₘ * tanh(I₀/Iₖ * exp(-w * k))
+```
+
+> (from BS1992)
+>
 > - $G_m$ maximum growth rate. The maximum rate of reef growth is in the range of lO-lSrnmyr-' (Macintyre etal., 1977; Adey, 1978; Davies, 1983).
 > - $k$ extinction coefficient. This is a measure of the extinction of
 > photosynthetically active radiation (PAR), i.e. light with a wavelength of
@@ -304,8 +301,23 @@ docs/fig/tanh.svg: src/figures/plot-tanh.gnuplot
 
 </details>
 
+``` {.julia file=src/Burgess2013/Production.jl}
+module Production
 
+using ..Config: Species, Iₖ, k, gₘ
 
+<<carbonate-production>>
+
+function production_rate(I₀::Float64, s::Species, w::Float64)
+    g(gₘ(s), I₀, Iₖ(s), k(s), w)
+end
+
+function production_rate(I₀::Float64, specs::Vector{Species}, spec_map::Matrix{Int}, w::Matrix{Int})
+    production_rate.(I₀, Iterators.map(i -> specs[i], spec_map), w)
+end
+
+end
+```
 
 ### Crowding
 In crowded areas carbonate production rates are reduced. For cells where
@@ -320,14 +332,14 @@ $$n_{opt} \le n \le n_{max}$$
 
 we have a linear increase and linear decrease of production rate (i.e. a triangle function).
 
-### Transport
+## Transport
 The sediment that is produced is distributed into lower lying neighbour cells that are not occupied by a producer. A user defined fraction of sediment from a producer is transported, first divided equally to lower neighbours, cascading to its neighbours by splitting in half and so on. The cascade stops when the sediment reaches a minimal threshold.
 
 Thus, this step has two free parameters: the transported fraction of produced carbonate and the lower threshold.
 
 Apparent from the illustration in B13 Figure 4, a 8-cell neighbourhood is used. Nothing is mentioned about the order in which the transport is computed. We may tag transported sediment with a bit flip and assign a new lythofacies to transported sediment.
 
-### Subsidence
+## Subsidence
 Subsidence refers to gradual lowering or lifting of the underlying floor bed. This could be either sea level rise due to climate change, but also tectonic activity. Sea level also changes according to a given recipe with say three sinusoidals (e.g. Milankovich cycles). When a cell gets "subaerial exposure", i.e. the water level drops below the cell elevation (stupid jargon), accumulation stops and the cell becomes dormant. On reflooding, the cell resumes activity. From the text it is not entirely clear, but I think deactivated cells don't take part in the CA, so they count as dead neighbours.
 
 - [reference on accommodation](http://strata.uga.edu/sequence/accommodation.html), also links to a model called [SedFlux](https://github.com/mcflugen/sedflux).
@@ -337,11 +349,20 @@ $$T + E = S + W$$
 Saying Tectonic subsidence plus Eustatic sea-level change equals Sedimentation plus change in Water depth.
 
 
-### Steps
+## Steps
 
 1. Update waterdepth, given subsidence
 2. Update sea level elevation, given eustatics
 3. Run CA
 4. Compute thickness of carbonate production
 5. Compute sediment transport
+
+We need to keep a state with the following components:
+
+- height map
+- species
+- global time, implying:
+  - sea level and subsidence
+
+Every cycle we may export a layer of sediment to archive.
 

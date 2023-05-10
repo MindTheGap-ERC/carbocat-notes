@@ -2,6 +2,7 @@
 # ~\~ begin <<docs/carbocat.md|src/figures/ca.jl>>[init]
 using MindTheGap.Burgess2013.CA
 using MindTheGap.Stencil: Reflected
+using MindTheGap.Utility
 using GnuplotLite
 
 function plot_array(w::Int, h::Int, msgs; xtics="set xtics", ytics="set ytics")
@@ -63,38 +64,6 @@ function plot(output::String)
                               for r in result);
                        xtics="set xtics 10, 10, 50",
                        ytics="set ytics 10, 10, 50")
-    end
-end
-
-struct Select
-    iter
-    selection
-end
-
-function select(it, sel)
-    Select(enumerate(it), sel)
-end
-
-function Base.iterate(s::Select)
-    x = iterate(s.selection)
-    if x !== nothing
-        (idx, selstate) = x
-        ((_, value), rest) = Iterators.peel(Iterators.dropwhile(((i, y),) -> i != idx, s.iter))
-        return (value, (selstate, rest))
-    else
-        return nothing
-    end
-end
-
-function Base.iterate(s::Select, state)
-    (selstate, rest) = state
-    x = iterate(s.selection, selstate)
-    if x !== nothing
-        (idx, selstate) = x
-        ((_, value), rest) = Iterators.peel(Iterators.dropwhile(((i, y),) -> i != idx, s.iter))
-        return (value, (selstate, rest))
-    else
-        return nothing
     end
 end
 

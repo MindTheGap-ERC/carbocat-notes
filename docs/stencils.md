@@ -107,6 +107,10 @@ end
 <<eca-plot>>
 ```
 
+=== "Rule 18"
+
+    ![](fig/rule18.svg)
+
 === "Rule 30"
 
     ![](fig/rule30.svg)
@@ -149,7 +153,7 @@ end
 
 fig := docs/fig
 
-all: $(fig)/rule30.svg $(fig)/rule60.svg $(fig)/rule110.svg
+all: $(fig)/rule18.svg $(fig)/rule30.svg $(fig)/rule60.svg $(fig)/rule110.svg
 
 $(fig)/rule%.svg: src/examples/eca.jl
 > @mkdir -p $(@D)
