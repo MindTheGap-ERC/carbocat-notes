@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/examples/eca.jl
-# ~\~ begin <<docs/stencils.md|src/examples/eca.jl>>[init]
+# ~/~ begin <<docs/stencils.md#src/examples/eca.jl>>[init]
 using MindTheGap.Stencil
 using GnuplotLite
 
@@ -18,7 +17,7 @@ function eca(r::Int, n::Int, iter::Int)
     y
 end
 
-# ~\~ begin <<docs/stencils.md|eca-plot>>[init]
+# ~/~ begin <<docs/stencils.md#eca-plot>>[init]
 function plot_eca(output::String, r::Int, n::Int, iter::Int)
     plot_width = 700
     plot_height = plot_width * iter ÷ n + 100
@@ -36,5 +35,5 @@ function plot_eca(output::String, r::Int, n::Int, iter::Int)
             send("plot \$data nonuniform matrix u (\$1+0.5):(\$2+0.5):3 with image")
     end
 end
-# ~\~ end
-# ~\~ end
+# ~/~ end
+# ~/~ end

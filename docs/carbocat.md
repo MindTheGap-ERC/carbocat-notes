@@ -1,4 +1,9 @@
-# CarboCAT
+---
+title: CarboKitten
+subtitle: CarboCAT in Julia
+---
+
+# CarboCAT 2013
 CarboCAT is primarily based on a very simple cellular automaton (CA). We may explore this CA as a first step in implementing the model in Julia.
 
 ``` {.julia file=src/Burgess2013.jl}
@@ -7,6 +12,7 @@ module Burgess2013
 include("Burgess2013/Config.jl")
 include("Burgess2013/CA.jl")
 include("Burgess2013/Production.jl")
+include("Burgess2013/Transport.jl")
 
 end
 ```
@@ -57,7 +63,6 @@ function rules(neighbourhood::Matrix{Int}, order::Vector{Int})
         (4 <= n && n <= 10 ? cell_species : 0)
     end
 end
-
 ```
 
 This function is not yet adaptible to the given rule set. Such a modification is not so hard to make. 
@@ -191,12 +196,21 @@ function plot_long_times(output::String)
 end
 ```
 
-``` {.make .build-artifact #make-burgess-fig3}
+``` {.make file=figures.mk}
 .RECIPEPREFIX = >
 .PHONY: all
+
 fig := docs/fig
 
-all: $(fig)/burgess2013-fig3.svg $(fig)/burgess2013-long-times.svg
+
+<<build>>
+
+all: $(targets)
+```
+
+``` {.make #build}
+targets += $(fig)/burgess2013-fig3.svg
+targets += $(fig)/burgess2013-long-times.svg
 
 docs/fig/burgess2013-fig3.svg: src/figures/ca.jl
 > julia --project=. -e 'include("$<"); plot("$@")'
@@ -331,13 +345,6 @@ $$n_{opt} \le n \le n_{max}$$
 ($n_{min}$ and $n_{max}$ for living cells are 4 and 10)
 
 we have a linear increase and linear decrease of production rate (i.e. a triangle function).
-
-## Transport
-The sediment that is produced is distributed into lower lying neighbour cells that are not occupied by a producer. A user defined fraction of sediment from a producer is transported, first divided equally to lower neighbours, cascading to its neighbours by splitting in half and so on. The cascade stops when the sediment reaches a minimal threshold.
-
-Thus, this step has two free parameters: the transported fraction of produced carbonate and the lower threshold.
-
-Apparent from the illustration in B13 Figure 4, a 8-cell neighbourhood is used. Nothing is mentioned about the order in which the transport is computed. We may tag transported sediment with a bit flip and assign a new lythofacies to transported sediment.
 
 ## Subsidence
 Subsidence refers to gradual lowering or lifting of the underlying floor bed. This could be either sea level rise due to climate change, but also tectonic activity. Sea level also changes according to a given recipe with say three sinusoidals (e.g. Milankovich cycles). When a cell gets "subaerial exposure", i.e. the water level drops below the cell elevation (stupid jargon), accumulation stops and the cell becomes dormant. On reflooding, the cell resumes activity. From the text it is not entirely clear, but I think deactivated cells don't take part in the CA, so they count as dead neighbours.

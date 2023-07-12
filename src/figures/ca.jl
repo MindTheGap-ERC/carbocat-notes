@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/figures/ca.jl
-# ~\~ begin <<docs/carbocat.md|src/figures/ca.jl>>[init]
+# ~/~ begin <<docs/carbocat.md#src/figures/ca.jl>>[init]
 using MindTheGap.Burgess2013.CA
 using MindTheGap.Stencil: Reflected
 using MindTheGap.Utility
@@ -86,4 +85,4 @@ function plot_long_times(output::String)
                        ytics="set ytics 10, 10, 50")
     end
 end
-# ~\~ end
+# ~/~ end

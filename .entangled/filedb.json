@@ -1,0 +1,243 @@
+{
+  "version": "2.0.0b3",
+  "files": [
+    {
+      "path": "README.md",
+      "deps": null,
+      "modified": "2023-05-09T00:01:08.449567",
+      "hexdigest": "1dae4f5456e46dcfa43cb23063ef8635fe13316200af82be3df1de65af4494f1"
+    },
+    {
+      "path": "docs/index.md",
+      "deps": null,
+      "modified": "2023-06-26T13:53:33.082178",
+      "hexdigest": "323d7d32d17228efc301e71fb9d1fafe69ddfdb761e2e13da062dadcfd828158"
+    },
+    {
+      "path": "docs/stencils.md",
+      "deps": null,
+      "modified": "2023-06-26T13:56:54.116105",
+      "hexdigest": "6f0291972f1049afdb0125165db3537df50fecf7a111c8465db4edaa2009438c"
+    },
+    {
+      "path": "docs/carbocat.md",
+      "deps": null,
+      "modified": "2023-06-26T14:04:43.182665",
+      "hexdigest": "eb8e3c332121017ab9047dc21b53d8455b837c61c9b7dc994ba1ed5e6c9acacd"
+    },
+    {
+      "path": "docs/utility.md",
+      "deps": null,
+      "modified": "2023-06-20T08:49:55.445525",
+      "hexdigest": "f3aa3714059726824061f7843df19fdcfeb4f6a9a9d42485304a11127d1e7d66"
+    },
+    {
+      "path": "src/MindTheGap.jl",
+      "deps": [
+        "docs/index.md"
+      ],
+      "modified": "2023-06-25T16:33:27.691823",
+      "hexdigest": "747fb52ee30278b2bd439c7f65bc82aeede4b682330eece22a60ad76c3924bd4"
+    },
+    {
+      "path": "src/Stencil.jl",
+      "deps": [
+        "docs/stencils.md"
+      ],
+      "modified": "2023-06-26T13:56:54.044105",
+      "hexdigest": "fcb72342d3be23824cd09b0161015bf3bb673d06fce65f8399aa748d7254ccf3"
+    },
+    {
+      "path": "src/Burgess2013/CA.jl",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-06-26T14:04:43.156665",
+      "hexdigest": "0068bf0902e3d0a4d6d56b76965da5ff1130229e42fe288309f22f410c0dd45a"
+    },
+    {
+      "path": "src/Burgess2013/Production.jl",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-05-18T01:46:42.273829",
+      "hexdigest": "27080f7ba1c47a2ed48fdb7cc74124b7f4ae96c9195db7f81ca11d0f49b18aab"
+    },
+    {
+      "path": "src/Utility.jl",
+      "deps": [
+        "docs/utility.md"
+      ],
+      "modified": "2023-05-18T01:46:42.274828",
+      "hexdigest": "db506688d6a7c241a8beab88943ccbd1db7ce6c50e433fa6091aaf016b3ee2c6"
+    },
+    {
+      "path": "src/Burgess2013/Config.jl",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-05-18T01:46:42.274828",
+      "hexdigest": "ac734f4878d11bb0cd92426420e7644a887737d192dab995a70490c218a1afdd"
+    },
+    {
+      "path": "src/Burgess2013.jl",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-06-20T14:40:10.202753",
+      "hexdigest": "ed7255d97eb1dcef68b97e4d3358b896baff1c1c11a9aef962d22704440c7d78"
+    },
+    {
+      "path": "src/figures/ca.jl",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-05-18T01:46:42.275828",
+      "hexdigest": "c26825e4b3bbaf8de1d697438891c8afa6bb3d0836f73ba823f8ecd7b2fc1c4c"
+    },
+    {
+      "path": "src/examples/game-of-life.jl",
+      "deps": [
+        "docs/stencils.md"
+      ],
+      "modified": "2023-05-18T01:46:42.275828",
+      "hexdigest": "ab06d6c6471fbc0ad9ed0315e6ddc568c40be004cc4e6b1edd7f90f4631c19be"
+    },
+    {
+      "path": "src/examples/convolution.jl",
+      "deps": [
+        "docs/stencils.md"
+      ],
+      "modified": "2023-05-18T01:46:42.275828",
+      "hexdigest": "fcc12737a05bea577c89058c85e530d9af9533a7ec2189ca1c84f939ac0c5e7e"
+    },
+    {
+      "path": "src/examples/eca.jl",
+      "deps": [
+        "docs/stencils.md"
+      ],
+      "modified": "2023-05-18T01:46:42.276829",
+      "hexdigest": "385f445b1d94cd5063f64a47cf301084b8b1942042a02f9ced4495a322616aef"
+    },
+    {
+      "path": "docs/daisy-world.md",
+      "deps": null,
+      "modified": "2023-06-25T17:01:18.089620",
+      "hexdigest": "0d0164c086e1aaf8580ab762f2d59f043e1c052596d1e5e718146ea5a345b3d0"
+    },
+    {
+      "path": "src/Daisy.jl",
+      "deps": [
+        "docs/daisy-world.md"
+      ],
+      "modified": "2023-05-18T02:03:45.824084",
+      "hexdigest": "5b01f7aaeaea4f37635d6a1cfd501c8a7fc59196c58825d53c3c0b13eba69b30"
+    },
+    {
+      "path": "src/figures/burgess2013-fig2.gnuplot",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-06-20T08:43:58.110315",
+      "hexdigest": "fa584f2e2c639eccb5adf46f682f7038fede2e65b303484715236dbcd93f9d81"
+    },
+    {
+      "path": "src/figures/plot-tanh.gnuplot",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-06-20T08:43:58.111315",
+      "hexdigest": "ae8c8696daed49c44f67f6c63e5a2b382d82055ec7c305dcc12e79ab89f88819"
+    },
+    {
+      "path": "docs/carbocat-transport.md",
+      "deps": null,
+      "modified": "2023-06-20T15:53:40.686182",
+      "hexdigest": "df81ed621a6e992dc6b60b71fadc77e6cc3ca93c6c6d8ef62de9bf20b6b7a0ca"
+    },
+    {
+      "path": "src/Burgess2013/Transport.jl",
+      "deps": [
+        "docs/carbocat-transport.md"
+      ],
+      "modified": "2023-06-20T15:53:40.750182",
+      "hexdigest": "d50ba4f2a43f2c0334ce06573f4c8f076e5f3c5b25e710e54c4c6f4861fe2fae"
+    },
+    {
+      "path": "src/RandomFields.jl",
+      "deps": [
+        "docs/random-fields.md"
+      ],
+      "modified": "2023-06-25T16:32:37.294469",
+      "hexdigest": "01b42786bad7ef5de58539336fc21f0462cdc3499288dca2ddf9efc65e61c8f7"
+    },
+    {
+      "path": "src/scripts/Power.jl",
+      "deps": [
+        "docs/random-fields.md"
+      ],
+      "modified": "2023-06-25T16:32:37.461470",
+      "hexdigest": "4d896a2fca09a6b12709511262f00551560499f3458377d5759ee6ca911f587e"
+    },
+    {
+      "path": "docs/random-fields.md",
+      "deps": null,
+      "modified": "2023-06-25T16:33:27.796824",
+      "hexdigest": "1638353dd7e421cb4acd5b2ecd571985d3ccb435a1204ca0d11301e0f711fc76"
+    },
+    {
+      "path": "src/Daisy/SingleSpecies.jl",
+      "deps": [
+        "docs/daisy-world.md"
+      ],
+      "modified": "2023-06-25T17:01:18.194621",
+      "hexdigest": "005118edde8aeedee88e63f417759f87e81599ef942e38f523422854940efd7a"
+    },
+    {
+      "path": "data/contents.md",
+      "deps": null,
+      "modified": "2023-06-26T10:20:38.562254",
+      "hexdigest": "348541d2194daa4f44f234b2b39d20bc54b954e462dc0f7811dd36fa13a7fca1"
+    },
+    {
+      "path": "figures.mk",
+      "deps": [
+        "docs/carbocat.md"
+      ],
+      "modified": "2023-06-26T10:51:31.799598",
+      "hexdigest": "9d5647457fb156d92263fcf1099e658b7e04e9743f13b9d36c5293fadf6fdaef"
+    },
+    {
+      "path": "test/runtests.jl",
+      "deps": [
+        "docs/stencils.md",
+        "docs/index.md"
+      ],
+      "modified": "2023-06-26T13:55:43.994781",
+      "hexdigest": "a3621331ccd42fb70f64861110d721da47ea67ec65006d73a49a5417fd03895c"
+    }
+  ],
+  "source": [],
+  "target": [
+    "src/figures/ca.jl",
+    "src/Burgess2013/Transport.jl",
+    "test/runtests.jl",
+    "src/Burgess2013/Config.jl",
+    "src/Daisy/SingleSpecies.jl",
+    "src/Utility.jl",
+    "figures.mk",
+    "src/examples/eca.jl",
+    "src/MindTheGap.jl",
+    "src/figures/plot-tanh.gnuplot",
+    "src/examples/game-of-life.jl",
+    "src/Daisy.jl",
+    "src/Burgess2013/Production.jl",
+    "src/scripts/Power.jl",
+    "src/Burgess2013.jl",
+    "src/Stencil.jl",
+    "src/examples/convolution.jl",
+    "src/RandomFields.jl",
+    "src/Burgess2013/CA.jl",
+    "src/figures/burgess2013-fig2.gnuplot"
+  ]
+}

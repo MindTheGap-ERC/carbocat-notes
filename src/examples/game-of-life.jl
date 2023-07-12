@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/examples/game-of-life.jl
-# ~\~ begin <<docs/stencils.md|src/examples/game-of-life.jl>>[init]
+# ~/~ begin <<docs/stencils.md#src/examples/game-of-life.jl>>[init]
 using MindTheGap.Stencil
 using GnuplotLite
 
@@ -7,12 +6,12 @@ function game_of_life(w, h)
     y1 = rand(Bool, (w, h))
     y2 = Array{Bool}(undef, w, h)
 
-    # ~\~ begin <<docs/stencils.md|game-of-life-rules>>[init]
+    # ~/~ begin <<docs/stencils.md#game-of-life-rules>>[init]
     "x is a 3x3 region around the cell at x[2,2]."
     rules(x) = let c = x[2, 2], s = sum(x) - c
         c && s == 2 || s == 3
     end
-    # ~\~ end
+    # ~/~ end
 
     op = stencil(Bool, Periodic{2}, (3, 3), rules)
     Channel() do ch
@@ -25,7 +24,7 @@ function game_of_life(w, h)
     end
 end
 
-# ~\~ begin <<docs/stencils.md|life-plot>>[init]
+# ~/~ begin <<docs/stencils.md#life-plot>>[init]
 function plot_life(output::String, w::Int, h::Int)
     (z, _) = Iterators.peel(Iterators.drop(game_of_life(w, h), 50))
     plot_width = 700
@@ -42,5 +41,5 @@ function plot_life(output::String, w::Int, h::Int)
             send("plot \$data matrix u (\$1+0.5):(\$2+0.5):3 with image pixels")
     end
 end
-# ~\~ end
-# ~\~ end
+# ~/~ end
+# ~/~ end

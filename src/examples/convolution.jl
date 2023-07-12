@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/examples/convolution.jl
-# ~\~ begin <<docs/stencils.md|src/examples/convolution.jl>>[init]
+# ~/~ begin <<docs/stencils.md#src/examples/convolution.jl>>[init]
 using MindTheGap.Stencil
 using GnuplotLite
 
@@ -42,4 +41,4 @@ function plot_boundary_types(output::String)
             send("unset multiplot")
     end
 end
-# ~\~ end
+# ~/~ end

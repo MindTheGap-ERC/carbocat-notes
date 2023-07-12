@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/Utility.jl
-# ~\~ begin <<docs/utility.md|src/Utility.jl>>[init]
+# ~/~ begin <<docs/utility.md#src/Utility.jl>>[init]
 module Utility
 
 export select
@@ -37,4 +36,4 @@ function Base.iterate(s::Select, state)
 end
 
 end
-# ~\~ end
+# ~/~ end

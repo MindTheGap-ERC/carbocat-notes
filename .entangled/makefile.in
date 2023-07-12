@@ -1,0 +1,90 @@
+.RECIPEPREFIX = >
+.PHONY = site clean
+
+# This Makefile creates a static website from Markdown sources
+
+source_dir := docs
+figure_dir := $(source_dir)/fig
+target_dir := site
+
+template_dir := .entangled/template
+script_dir := .entangled/scripts
+
+# compile to stand-alone HTML5
+pandoc_args += -s -t html5 --section-divs
+# read markdown flavour
+pandoc_args += -f markdown
+# add toc
+pandoc_args += --toc --toc-depth 2
+# use specified template
+pandoc_args += --template $(template_dir)/template.html
+# use css
+pandoc_args += --css light.css
+# pandoc_args += --filter pandoc-eqnos
+pandoc_args += --lua-filter $(script_dir)/annotate.lua
+pandoc_args += --lua-filter $(script_dir)/eqnos.lua
+# enable citations and math
+pandoc_args += --citeproc --mathjax
+pandoc_args += -M contents_file:data/contents.md
+pandoc_args += --lua-filter $(script_dir)/include-contents.lua
+pandoc_args += --lua-filter $(script_dir)/details.lua
+pandoc_args += --lua-filter $(script_dir)/include.lua
+pandoc_args += --lua-filter $(script_dir)/tabs.lua
+
+css := $(wildcard $(template_dir)/*.css)
+target_css := $(css:$(template_dir)/%.css=$(target_dir)/%.css)
+
+figs := $(wildcard $(figure_dir)/*)
+target_figs := $(figs:$(source_dir)/%=$(target_dir)/%)
+
+markdown := $(wildcard $(source_dir)/*.md)
+target_html := $(markdown:$(source_dir)/%.md=$(target_dir)/%.html)
+
+static_targets := $(target_css) $(target_figs)
+pandoc_targets := $(target_html)
+
+site: $(static_targets) $(pandoc_targets)
+
+clean:
+> @echo "Removing target directory: $(target_dir)"
+> @rm -rf $(target_dir)
+
+data/contents.md: $(markdown)
+> @echo "Generating $@"
+> @mkdir -p $(@D)
+> @rm -f $@
+> @for f in $^; do \
+>   title="$$(pandoc -t plain $$f --lua-filter $(script_dir)/get-title.lua)" ; \
+>   target="$$(basename $$f .md).html" ; \
+>   echo "- [$${title}]($${target})" >> $@ ; \
+> done
+
+$(target_dir)/%.css: $(template_dir)/%.css
+> @echo "Copying CSS: $(@F)"
+> @mkdir -p $(@D)
+> @cp $< $@
+
+$(target_dir)/fig/%: $(source_dir)/fig/%
+> @echo "Copying Figure: $(@F)"
+> @mkdir -p $(@D)
+> @cp $< $@
+
+$(target_dir)/%.html: $(source_dir)/%.md data/contents.md
+> @echo "Building site: $(@F)"
+> @mkdir -p $(@D)
+> @pandoc $(pandoc_args) -o $@ $<
+
+watch:
+> @tmux new-session make --no-print-directory watch-pandoc \; \
+>   split-window -v make --no-print-directory watch-browser-sync \; \
+>   split-window -v entangled watch \; \
+>   select-layout even-vertical \;
+
+watch-pandoc:
+> @while true; do \
+>   inotifywait -e close_write -r .entangled Makefile docs; \
+>   make site; \
+> done
+
+watch-browser-sync:
+> browser-sync start -w -s site

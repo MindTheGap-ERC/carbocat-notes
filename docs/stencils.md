@@ -1,3 +1,8 @@
+---
+title: CarboKitten
+subtitle: stencil operations in Julia
+---
+
 # Stencil operations
 A *stencil* is the common term for computing many-to-one operations on grids. Examples of applications are:
 
@@ -20,14 +25,29 @@ struct Constant{dim, value} <: Boundary{dim} end
 
 Now we can use these traits to define three methods for indexing on an offset from some index that is assumed to be within bounds.
 
+``` {.julia #spec}
+@testset "offset_value" begin
+    @test CartesianIndex(1, 1) == offset_index(Reflected{2}, (3, 3), CartesianIndex(1, 1), CartesianIndex(0, 0))
+end
+```
+
 ``` {.julia #offset-indexing}
-function offset_value(::Type{Periodic{dim}}, z::AbstractArray, i::CartesianIndex, Δi::CartesianIndex) where {dim}
-    z[mod1.(Tuple(i + Δi), size(z))...]
+function offset_index(::Type{Periodic{dim}}, shape::NTuple{dim,Int}, i::CartesianIndex, Δi::CartesianIndex) where {dim}
+    CartesianIndex(mod1.(Tuple(i + Δi), shape)...)
 end
 
-function offset_value(::Type{Reflected{dim}}, z::AbstractArray{T, dim}, i::CartesianIndex, Δi::CartesianIndex) where {T, dim}
+function offset_index(::Type{Reflected{dim}}, shape::NTuple{dim, Int}, i::CartesianIndex, Δi::CartesianIndex) where {dim}
     clip(i, a, b) = (i < a ? a + a - i : (i > b ? b + b - i : i))
-    z[clip.(Tuple(i + Δi), ones(Int, dim), size(z))...]
+    CartesianIndex(clip.(Tuple(i + Δi), ones(Int, dim), shape)...)
+end
+
+function offset_index(::Type{Constant{dim, value}}, shape::NTuple{dim, Int}, i::CartesianIndex, Δi::CartesianIndex) where {dim, value}
+    j = i + Δi
+    all(checkindex.(Bool, range.(1, shape), Tuple(j))) ? j : nothing
+end
+
+function offset_value(BT::Type{B}, z::AbstractArray, i::CartesianIndex, Δi::CartesianIndex) where {dim, B <: Boundary{dim}}
+    z[offset_index(BT, size(z), i, Δi)]
 end
 
 function offset_value(::Type{Constant{dim, value}}, z::AbstractArray, i::CartesianIndex, Δi::CartesianIndex) where {dim, value}
@@ -71,7 +91,7 @@ We will now test this function first on an Elementary CA (ECA), Conway's Game of
 ``` {.julia file=src/Stencil.jl}
 module Stencil
 
-export Boundary, Reflected, Periodic, Constant, stencil, convolution
+export Boundary, Reflected, Periodic, Constant, stencil, convolution, offset_index, offset_value
 
 <<boundary-trait>>
 <<offset-indexing>>
@@ -107,21 +127,20 @@ end
 <<eca-plot>>
 ```
 
-=== "Rule 18"
-
-    ![](fig/rule18.svg)
-
-=== "Rule 30"
-
-    ![](fig/rule30.svg)
-
-=== "Rule 60"
-
-    ![](fig/rule60.svg)
-
-=== "Rule 110"
-
-    ![](fig/rule110.svg)
+:::tabs
+:::: {.tab #rule-18 title="Rule 18"}
+![](fig/rule18.svg)
+::::
+:::: {.tab #rule-30 title="Rule 30"}
+![](fig/rule30.svg)
+::::
+:::: {.tab #rule-60 title="Rule 60"}
+![](fig/rule60.svg)
+::::
+:::: {.tab #rule-110 title="Rule 110"}
+![](fig/rule110.svg)
+::::
+:::
 
 Even these one-dimensional CA show highly complex behaviour. For instance, it has been shown that rule 110 is Turing complete.
 

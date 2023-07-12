@@ -1,14 +1,13 @@
-# ~\~ language=Julia filename=src/Burgess2013/CA.jl
-# ~\~ begin <<docs/carbocat.md|src/Burgess2013/CA.jl>>[init]
+# ~/~ begin <<docs/carbocat.md#src/Burgess2013/CA.jl>>[init]
 module CA
 
 using MindTheGap.Stencil
 
-# ~\~ begin <<docs/carbocat.md|cycle-permutation>>[init]
+# ~/~ begin <<docs/carbocat.md#cycle-permutation>>[init]
 cycle_permutation(n_species::Int) =
     (circshift(1:n_species, x) for x in Iterators.countfrom(0))
-# ~\~ end
-# ~\~ begin <<docs/carbocat.md|burgess2013-rules>>[init]
+# ~/~ end
+# ~/~ begin <<docs/carbocat.md#burgess2013-rules>>[init]
 function rules(neighbourhood::Matrix{Int}, order::Vector{Int})
     cell_species = neighbourhood[3, 3]
     neighbour_count(species) = sum(neighbourhood .== species)
@@ -25,8 +24,7 @@ function rules(neighbourhood::Matrix{Int}, order::Vector{Int})
         (4 <= n && n <= 10 ? cell_species : 0)
     end
 end
-
-# ~\~ end
+# ~/~ end
 
 function run(::Type{B}, init::Matrix{Int}, n_species::Int) where {B <: Boundary{2}}
     Channel{Matrix{Int}}() do ch
@@ -42,4 +40,4 @@ function run(::Type{B}, init::Matrix{Int}, n_species::Int) where {B <: Boundary{
 end
 
 end
-# ~\~ end
+# ~/~ end

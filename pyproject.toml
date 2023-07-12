@@ -9,6 +9,7 @@ packages = [{include = "mind_the_gap"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+entangled-cli = {path = "/home/johannes/Code/entangled/entangled.py"}
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,5 +1,4 @@
-# ~\~ language=Julia filename=src/Burgess2013/Config.jl
-# ~\~ begin <<docs/carbocat.md|src/Burgess2013/Config.jl>>[init]
+# ~/~ begin <<docs/carbocat.md#src/Burgess2013/Config.jl>>[init]
 module Config
 
 struct Species
@@ -16,4 +15,4 @@ k(s::Species) = s.extinction_coefficient
 gₘ(s::Species) = s.maximum_growth_rate
 
 end
-# ~\~ end
+# ~/~ end
