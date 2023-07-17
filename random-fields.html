@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>random-fields</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="light.css" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+<script>
+// ScrollSpy snippet from Bramus Van Damme (https://www.bram.us/)
+// MIT License.
+window.addEventListener('DOMContentLoaded', () => {
+	const observer = new IntersectionObserver(entries => {
+		entries.forEach(entry => {
+			const id = entry.target.getAttribute('id');
+      const nav = document.querySelector(`nav li a[href="#${id}"]`)
+      if (nav) {
+        if (entry.intersectionRatio > 0) {
+          nav.parentElement.classList.add('active');
+        } else {
+          nav.parentElement.classList.remove('active');
+			} }
+		});
+	});
+
+	// Track all sections that have an `id` applied
+	document.querySelectorAll('section[id]').forEach((section) => {
+		observer.observe(section);
+	});
+});
+
+function openTab(evt, cityName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tab");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+<div class="row">
+<div class="col-3 col-s-6" id="contents">
+<ul>
+<li><a href="bosscher-1992.html">reproducing Bosscher 1992</a></li>
+<li><a href="carbocat.html">CarboCAT in Julia</a></li>
+<li><a href="carbocat-transport.html">Sediment Transport</a></li>
+<li><a href="daisy-world.html">reading notes on Wood’s 2008
+review</a></li>
+<li><a href="index.html">project notes</a></li>
+<li><a href="intro-to-julia.html"></a></li>
+<li><a href="random-fields.html"></a></li>
+<li><a href="stencils.html">stencil operations in Julia</a></li>
+<li><a href="utility.html">utility functions</a></li>
+</ul>
+</div>
+<div class="col-6 col-s-9" id="main">
+<section id="initial-conditions" class="level1">
+<h1>Initial conditions</h1>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/RandomFields.jl
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> RandomFields</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">export</span> Box, white_noise, fftfreq, mapk, gaussian_noise, power_law,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       discrete_scale_filter, sampled_gaussian_filter,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       fourier_power</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Random</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">FFTW</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>fourier<span class="op">&gt;&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>box<span class="op">&gt;&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>filters<span class="op">&gt;&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>noise<span class="op">&gt;&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fourier_power</span>(box<span class="op">::</span><span class="dt">Box{dim}</span>, f<span class="op">::</span><span class="dt">AbstractArray{Float64,dim}</span>; n_bins <span class="op">=</span> <span class="fl">64</span>) <span class="kw">where</span> {dim}</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> <span class="fu">fft</span>(f)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    power_table <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        ksqr <span class="op">=</span> <span class="fu">vec</span>(<span class="fu">collect</span>(<span class="fu">+</span>((k <span class="op">.^</span> <span class="fl">2</span>)<span class="op">...</span>) <span class="cf">for</span> k <span class="kw">in</span> <span class="fu">fftfreq</span>(box))),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        power <span class="op">=</span> <span class="fu">vec</span>(<span class="fu">real</span>(<span class="fu">conj</span>(g) <span class="op">.*</span> g)) <span class="op">./</span> <span class="fu">size</span>(box))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort!</span>(power_table, [<span class="op">:</span>ksqr])</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    bin_size <span class="op">=</span> <span class="fu">size</span>(box) <span class="op">÷</span> n_bins</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    power_table.bin <span class="op">=</span> <span class="fu">repeat</span>(<span class="fl">1</span><span class="op">:</span>n_bins, inner<span class="op">=</span>bin_size)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    agg <span class="op">=</span> <span class="fu">combine</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">groupby</span>(power_table, <span class="op">:</span>bin),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="op">:</span>ksqr <span class="op">=&gt;</span> mean, <span class="op">:</span>power <span class="op">=&gt;</span> mean)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(agg, <span class="op">:</span>ksqr_mean, <span class="op">:</span>power_mean)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+</div>
+<section id="the-box" class="level2">
+<h2>The box</h2>
+<div class="named-code-block">
+<div class="code-block-title">
+«box»
+</div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Box{dim}</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    shape<span class="op">::</span><span class="dt">Dims{dim}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    physical_size<span class="op">::</span><span class="dt">NTuple{dim,Float64}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>box<span class="op">-</span>methods<span class="op">&gt;&gt;</span></span></code></pre></div>
+</div>
+<div class="named-code-block">
+<div class="code-block-title">
+«box-methods»
+</div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Box</span><span class="dt">{dim}</span>(n<span class="op">::</span><span class="dt">Int</span>, l<span class="op">::</span><span class="dt">Float64</span>) <span class="kw">where</span> {dim} <span class="op">=</span> <span class="fu">Box</span><span class="dt">{dim}</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dims</span><span class="dt">{dim}</span>(<span class="bu">Iterators</span>.<span class="fu">repeated</span>(n, dim)),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">NTuple</span><span class="dt">{dim}</span>(<span class="bu">Iterators</span>.<span class="fu">repeated</span>(l, dim)))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="fu">size</span>(box<span class="op">::</span><span class="dt">Box{dim}</span>) <span class="kw">where</span> {dim} <span class="op">=</span> <span class="fu">*</span>(box.shape<span class="op">...</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="fourier-basics" class="level2">
+<h2>Fourier basics</h2>
+<p>The Discrete Fourier Transform is defined as</p>
+<p><span class="math display">\[F(\vec{y})_l = \sum_{j = 1}^N y_j \exp
+(i k_l x_j).\]</span></p>
+<p>Our convention here is to include the usual factor <span
+class="math inline">\(2\pi\)</span> into the values of <span
+class="math inline">\(k_l\)</span>, as this simplifies our
+bookkeeping.</p>
+<section id="frequencies" class="level3">
+<h3>Frequencies</h3>
+<p>Discrete Fourier space is usually stored such that we start with
+positive ascending frequencies and the other half is negative ascending
+frequencies. For a grid with <span class="math inline">\(N\)</span>
+points and physical size <span class="math inline">\(L\)</span>, we can
+give the grid coordinates</p>
+<p><span class="math display">\[\vec{x} = {L \over N} \big[0, 1, 2,
+\dots, N-1\big].\]</span></p>
+<p>The corresponding Fourier frequencies are,</p>
+<p><span class="math display">\[\vec{k} = {2\pi \over L} \big[0, 1, 2,
+\dots, N_q-1, N_q, 1-N_q, 2-N_q, \dots, -2, -1\big],\]</span></p>
+<p>where <span class="math inline">\(N_q = N / 2\)</span> is the Nyquist
+wave number, and <span class="math inline">\(k_{N_q}\)</span> is the
+Nyquist frequency (including the factor <span
+class="math inline">\(2\pi\)</span>).</p>
+<div class="named-code-block">
+<div class="code-block-title">
+«fourier»
+</div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wavenumber</span>(n<span class="op">::</span><span class="dt">Int</span>, i<span class="op">::</span><span class="dt">Int</span>) <span class="op">=</span> i <span class="op">-</span> <span class="fl">1</span> <span class="op">&gt;</span> n <span class="op">÷</span> <span class="fl">2</span> ? i <span class="op">-</span> n <span class="op">-</span> <span class="fl">1</span> <span class="op">:</span> i <span class="op">-</span> <span class="fl">1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fftfreq</span>(n<span class="op">::</span><span class="dt">Int</span>, l<span class="op">::</span><span class="dt">Float64</span>, i<span class="op">::</span><span class="dt">Int</span>) <span class="op">=</span> <span class="fu">wavenumber</span>(n, i) <span class="op">*</span> <span class="fl">2</span>π <span class="op">/</span> l</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fftfreq</span>(n<span class="op">::</span><span class="dt">Int</span>, l<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> (<span class="fu">fftfreq</span>(n, l, i) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n)</span></code></pre></div>
+</div>
+<p>This easily extends to higher dimensions.</p>
+<div class="named-code-block">
+<div class="code-block-title">
+«box-methods»
+</div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fftfreq</span>(box<span class="op">::</span><span class="dt">Box{dim}</span>, idx<span class="op">::</span><span class="dt">CartesianIndex{dim}</span>) <span class="kw">where</span> {dim} <span class="op">=</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">NTuple</span><span class="dt">{dim,Float64}</span>(<span class="fu">fftfreq</span>.(box.shape, box.physical_size, <span class="fu">Tuple</span>(idx)))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fftfreq</span>(box<span class="op">::</span><span class="dt">Box{dim}</span>) <span class="kw">where</span> {dim} <span class="op">=</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Iterators</span>.<span class="fu">map</span>(idx <span class="op">-&gt;</span> <span class="fu">fftfreq</span>(box, idx), <span class="fu">CartesianIndices</span>(box.shape))</span></code></pre></div>
+</div>
+</section>
+<section id="filters" class="level3">
+<h3>Filters</h3>
+<p>We will make ample use of the Fourier convolution theorem. We’ll
+define a set of filters in terms of their Fourier transforms.</p>
+<div class="named-code-block">
+<div class="code-block-title">
+«filters»
+</div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Filter</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    f<span class="op">::</span><span class="dt">Function</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>(f<span class="op">::</span><span class="dt">Filter</span>)(k<span class="op">...</span>) <span class="op">=</span> f.<span class="fu">f</span>(k<span class="op">...</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Base</span>.<span class="op">:</span><span class="fu">*</span>(f1<span class="op">::</span><span class="dt">Filter</span>, f2<span class="op">::</span><span class="dt">Filter</span>) <span class="op">=</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Filter</span>((args<span class="op">...</span>) <span class="op">-&gt;</span> f1.<span class="fu">f</span>(args<span class="op">...</span>) <span class="op">*</span> f2.<span class="fu">f</span>(args<span class="op">...</span>))</span></code></pre></div>
+</div>
+<p>The Fourier transform of a Gaussian is a Gaussian. A Gaussian
+distribution with standard deviation <span
+class="math inline">\(\sigma\)</span>,</p>
+<p><span class="math display">\[G(x) = {1 \over {\sigma\sqrt{2 \pi}}}
+\exp\left(-{x^2 \over 2\sigma^2}\right),\]</span></p>
+<p>has the Fourier transform,</p>
+<p><span class="math display">\[\hat{G}(k) = \exp\left(- {{\sigma^2 k^2}
+\over 2}\right).\]</span></p>
+<p>We can approximate a Gaussian convolution by sampling the Gaussian on
+a grid</p>
+<div class="named-code-block">
+<div class="code-block-title">
+«filters»
+</div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sampled_gaussian_filter</span>(sigma<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">Filter</span>(<span class="kw">function</span> (k<span class="op">...</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    absk2 <span class="op">=</span> <span class="fu">+</span>((k <span class="op">.^</span> <span class="fl">2</span>)<span class="op">...</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(<span class="op">-</span> sigma<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> absk2 <span class="op">/</span> <span class="fl">2</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span>)</span></code></pre></div>
+</div>
+<p>For repeated filters with smaller width, it is better to use a
+<em>discrete scale filter</em>.</p>
+<div class="named-code-block">
+<div class="code-block-title">
+«filters»
+</div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">discrete_scale_filter</span>(box<span class="op">::</span><span class="dt">Box{2}</span>, sigma<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">Filter</span>(<span class="kw">function</span> (k1, k2)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    γ <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> k1 <span class="op">*</span> box.physical_size[<span class="fl">1</span>] <span class="op">/</span> box.shape[<span class="fl">1</span>]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> k2 <span class="op">*</span> box.physical_size[<span class="fl">2</span>] <span class="op">/</span> box.shape[<span class="fl">2</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> (sigma <span class="op">*</span> box.shape[<span class="fl">1</span>] <span class="op">/</span> box.physical_size[<span class="fl">1</span>])<span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(t <span class="op">*</span> ((<span class="fl">1</span> <span class="op">-</span> γ) <span class="op">*</span> (<span class="fu">cos</span>(u) <span class="op">+</span> <span class="fu">cos</span>(v)) <span class="op">+</span> γ <span class="op">*</span> (<span class="fu">cos</span>(u) <span class="op">*</span> <span class="fu">cos</span>(v)) <span class="op">-</span> <span class="fl">2</span> <span class="op">+</span> γ))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span>)</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="gaussian-random-fields" class="level2">
+<h2>Gaussian Random Fields</h2>
+<p>We consider random functions <span class="math inline">\(f :
+\mathbb{R}^n \to \mathbb{R}\)</span>. In general it is very hard to say
+anything meaningful about random functions without additional
+information. The first question would be: given any point <span
+class="math inline">\(x \in \mathbb{R}^n\)</span>, what is the
+probability distribution for <span class="math inline">\(y =
+f(x)\)</span>? This is called the <em>one-point</em> distribution
+function <span class="math inline">\(P(y\ |\ y=f(x))\)</span>. If a
+random field is <em>homogeneous</em> or <em>translation invariant</em>,
+the one-point distribution does not depend on location,</p>
+<p><span class="math display">\[P(y\ |\ y=f(x_1)) = P(y\ |\ y=f(x_2))\
+\forall\ x_1, x_2 \in \mathbb{R}^n, y \in \mathbb{R}.\]</span></p>
+<p>If we want to know more about the random field, we can look at the
+<span class="math inline">\(two-point\)</span> distribution <span
+class="math inline">\(P(y_1, y_2\ |\ y_1 = f(x_1), y_2 =
+f(x_2))\)</span>. For a homogeneous field, the two-point function should
+only depend on the distance <span class="math inline">\(r = x_2 -
+x_1\)</span>, so we can write <span class="math inline">\(P(y_1, y_2\ |\
+y_1 = f(x), y_2 = f(x+r))\)</span>, or shorter $P(f(x_1), f(x_2)). Now
+we also have a tool to talk about isotropy: a random field is isotropic
+if all its <span class="math inline">\(n\)</span>-point distributions
+depend only on the distance <span
+class="math inline">\(|r_i|\)</span>.</p>
+<p>We may consider the probability density function for an entire
+realisation of the field. Given the (possibly infinite) set of points
+<span class="math inline">\(\vec{x}\)</span>, and all its values <span
+class="math inline">\(\vec{y} = f.(\vec{x})\)</span>, we write the
+probability density <span class="math inline">\(P(\vec{y}\ |\ \vec{y} =
+f.(\vec{x}))\)</span>.</p>
+<p>A beautiful result that I will not derive here is that for Gaussian
+processes, all we need to know is the two-point distribution function,
+which fully determined by the two-point correlation function</p>
+<p><span class="math display">\[\xi(x, x+r):=\langle f(x)^{\star}f(x+r)
+\rangle\]</span></p>
+<p>When we talk about homogenous fields (as we usually do), <span
+class="math inline">\(\xi\)</span> does not depend on <span
+class="math inline">\(x\)</span>, and by the <em>ergodic theorem</em> we
+can replace the ensemble average by an integral over space (and dividing
+by the volume).</p>
+<p><span class="math display">\[\xi(r) = {1 \over V} \int f(x)^{\star}
+f(x+r) {\rm d} x.\]</span></p>
+<p>This only works if <span class="math inline">\(\xi(r)\)</span>
+vanishes when <span class="math inline">\(r\)</span> approaches
+inifinity. The two-point probability density function is then givin
+by</p>
+<p><span class="math display">\[P(\vec{y}) = {1 \over \sqrt{(2\pi)^n
+\det M}} \exp\left(
+    -{1 \over 2} \vec{y}^{\dagger} M^{-1} \vec{y}\right),\]</span></p>
+<p>where <span class="math inline">\(M\)</span> is the covariance matrix
+<span class="math inline">\(M_{ij} = \langle y_i^{\star} y_j
+\rangle\)</span>.</p>
+<section id="power-spectrum" class="level3">
+<h3>Power spectrum</h3>
+<p>Great things happen when looking at Gaussian random fields in Fourier
+space. We evaluate the two-point correlation function in Fourier space
+at the origin <span class="math inline">\(x = 0\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+\xi(r) &amp;= \left\langle
+        \int \hat{f}(k)^{\star} {{\rm d}k \over {(2\pi)^n}}
+        \int \hat{f}(k&#39;) e^{-ik&#39;r} {{\rm d}k \over {(2\pi)^n}}
+        \right\rangle\\
+       &amp;= \int \int \left\langle \hat{f}(k)^{\star} \hat{f}(k&#39;)
+\right\rangle
+       {{\rm d}k \over {(2\pi)^n}} e^{-ik&#39;r} {{\rm d}k&#39; \over
+{(2\pi)^n}}.
+\end{align}\]</span></p>
+<p>A translation in real space gives a phase shift in Fourier space,
+so</p>
+<p><span class="math display">\[\mathcal{F}[f(x + r)] = \hat{f}(k)
+e^{-ikr}.\]</span></p>
+<p>Since our integral needs to be invariant under translation, we may
+say,</p>
+<p><span class="math display">\[\left\langle
+\hat{f}(k)^{\star}\hat{f}(k&#39;)\right\rangle
+= \left\langle \hat{f}(k)^{\star}\hat{f}(k&#39;)\right\rangle
+e^{i(k-k&#39;)r},\]</span></p>
+<p>for any <span class="math inline">\(r \in \mathbb{R}^n\)</span>.
+Which is only true for <span class="math inline">\(k = k&#39;\)</span>.
+This means that <em>for any random field that is translation invariant,
+the Fourier coefficients are uncorrelated!</em> We can define the
+function <span class="math inline">\(P(k)\)</span> such that,</p>
+<p><span class="math display">\[\left\langle
+\hat{f}(k)^{\star}\hat{f}(k&#39;) \right\rangle := (2 \pi)^n P(k)
+\delta(k - k&#39;),\]</span></p>
+<p>and,</p>
+<p><span class="math display">\[\xi(r) = \int P(k) e^{ikr} {{\rm d}k
+\over {(2\pi)^n}}.\]</span></p>
+<p>This gives us a way of imposing a chosen correlation function on some
+white noise. Let’s compute the power of white noise, for which <span
+class="math inline">\(\xi(r) = \delta(r) \sigma^2\)</span>, then <span
+class="math inline">\(P(k) = \sigma^2\)</span>. Let’s see that it is
+so.</p>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/scripts/Power.jl
+</div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CosmicStructureFormation.InitialConditions</span>: Box, fourier_power</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span></code></pre></div>
+</div>
+<div class="named-code-block">
+<div class="code-block-title">
+«filters»
+</div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power_law</span>(n<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Filter</span>((k<span class="op">...</span>) <span class="op">-&gt;</span> <span class="fu">all</span>(k <span class="op">.==</span> <span class="fl">0.0</span>) ? <span class="fl">1.0</span> <span class="op">:</span> (<span class="fu">+</span>((k <span class="op">.^</span> <span class="fl">2</span>)<span class="op">...</span>))<span class="op">^</span>(n<span class="op">/</span><span class="fl">4</span>))</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="make-some-noise" class="level2">
+<h2>Make some noise</h2>
+<div class="named-code-block">
+<div class="code-block-title">
+«noise»
+</div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">white_noise</span>(box<span class="op">::</span><span class="dt">Box</span>) <span class="op">=</span> <span class="fu">randn</span>(box.shape<span class="op">...</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">mapk</span>(f<span class="op">::</span><span class="dt">Function</span>, box<span class="op">::</span><span class="dt">Box{dim}</span>) <span class="kw">where</span> {dim}</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> <span class="fu">Array</span><span class="dt">{Float64, dim}</span>(<span class="cn">undef</span>, box.size<span class="op">...</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i, k) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fu">fftfreq</span>(box))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        result[i] <span class="op">=</span> <span class="fu">f</span>(k)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    result</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">gaussian_noise</span>(box<span class="op">::</span><span class="dt">Box</span>, P<span class="op">::</span><span class="dt">Filter</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    noise <span class="op">=</span> <span class="fu">white_noise</span>(box)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> <span class="fu">fft</span>(noise)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i, k) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fu">fftfreq</span>(box))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        f[i] <span class="op">*=</span> <span class="fu">P</span>(k<span class="op">...</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">real</span>(<span class="fu">ifft</span>(f))</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+</div>
+</section>
+</section>
+</div>
+
+<div id="menu" class="col-3 col-s-3 menu"><nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#initial-conditions" id="toc-initial-conditions">Initial
+conditions</a>
+<ul>
+<li><a href="#the-box" id="toc-the-box">The box</a></li>
+<li><a href="#fourier-basics" id="toc-fourier-basics">Fourier
+basics</a></li>
+<li><a href="#gaussian-random-fields"
+id="toc-gaussian-random-fields">Gaussian Random Fields</a></li>
+<li><a href="#make-some-noise" id="toc-make-some-noise">Make some
+noise</a></li>
+</ul></li>
+</ul>
+</nav></div>
+</div>
+
+<div class="footer">
+</div>
+
+</body>
+</html>
