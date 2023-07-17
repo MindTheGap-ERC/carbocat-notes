@@ -10,8 +10,8 @@
     {
       "path": "docs/index.md",
       "deps": null,
-      "modified": "2023-06-26T13:53:33.082178",
-      "hexdigest": "323d7d32d17228efc301e71fb9d1fafe69ddfdb761e2e13da062dadcfd828158"
+      "modified": "2023-07-16T17:02:37.552494",
+      "hexdigest": "b12220dc47584ab4bd186944360e7cd66619c06210b2e29b08547648d954cac9"
     },
     {
       "path": "docs/stencils.md",
@@ -22,8 +22,8 @@
     {
       "path": "docs/carbocat.md",
       "deps": null,
-      "modified": "2023-06-26T14:04:43.182665",
-      "hexdigest": "eb8e3c332121017ab9047dc21b53d8455b837c61c9b7dc994ba1ed5e6c9acacd"
+      "modified": "2023-07-13T13:41:14.830190",
+      "hexdigest": "d9fb55169a811f929620bf5db643dcda913f6ae188c58356a7eb994caef1668e"
     },
     {
       "path": "docs/utility.md",
@@ -36,8 +36,8 @@
       "deps": [
         "docs/index.md"
       ],
-      "modified": "2023-06-25T16:33:27.691823",
-      "hexdigest": "747fb52ee30278b2bd439c7f65bc82aeede4b682330eece22a60ad76c3924bd4"
+      "modified": "2023-07-16T17:02:37.446493",
+      "hexdigest": "5183c75c6d1b82b1b70ded4b3a942831347de7c0058a3a8537c5837c13b9de19"
     },
     {
       "path": "src/Stencil.jl",
@@ -52,16 +52,17 @@
       "deps": [
         "docs/carbocat.md"
       ],
-      "modified": "2023-06-26T14:04:43.156665",
+      "modified": "2023-07-12T13:12:17.705165",
       "hexdigest": "0068bf0902e3d0a4d6d56b76965da5ff1130229e42fe288309f22f410c0dd45a"
     },
     {
       "path": "src/Burgess2013/Production.jl",
       "deps": [
-        "docs/carbocat.md"
+        "docs/carbocat.md",
+        "docs/bosscher-1992.md"
       ],
-      "modified": "2023-05-18T01:46:42.273829",
-      "hexdigest": "27080f7ba1c47a2ed48fdb7cc74124b7f4ae96c9195db7f81ca11d0f49b18aab"
+      "modified": "2023-07-16T19:46:21.645683",
+      "hexdigest": "502965819e9b44715c8a503cc266af8b314f135e85588e37351480b9a362b5af"
     },
     {
       "path": "src/Utility.jl",
@@ -136,18 +137,18 @@
     {
       "path": "src/figures/burgess2013-fig2.gnuplot",
       "deps": [
-        "docs/carbocat.md"
+        "docs/bosscher-1992.md"
       ],
-      "modified": "2023-06-20T08:43:58.110315",
-      "hexdigest": "fa584f2e2c639eccb5adf46f682f7038fede2e65b303484715236dbcd93f9d81"
+      "modified": "2023-07-13T11:13:30.603867",
+      "hexdigest": "eccae8bc7b76bbaa80bd30ec5cbb90ee0fb32d5f5b5311ab28d526daab159cfb"
     },
     {
       "path": "src/figures/plot-tanh.gnuplot",
       "deps": [
-        "docs/carbocat.md"
+        "docs/bosscher-1992.md"
       ],
-      "modified": "2023-06-20T08:43:58.111315",
-      "hexdigest": "ae8c8696daed49c44f67f6c63e5a2b382d82055ec7c305dcc12e79ab89f88819"
+      "modified": "2023-07-13T11:13:30.605866",
+      "hexdigest": "57d1bf4d621edc2cd40edb35e81418cf0d77da9d64f7f210ee11532d9176b90e"
     },
     {
       "path": "docs/carbocat-transport.md",
@@ -194,18 +195,13 @@
       "hexdigest": "005118edde8aeedee88e63f417759f87e81599ef942e38f523422854940efd7a"
     },
     {
-      "path": "data/contents.md",
-      "deps": null,
-      "modified": "2023-06-26T10:20:38.562254",
-      "hexdigest": "348541d2194daa4f44f234b2b39d20bc54b954e462dc0f7811dd36fa13a7fca1"
-    },
-    {
       "path": "figures.mk",
       "deps": [
+        "docs/bosscher-1992.md",
         "docs/carbocat.md"
       ],
-      "modified": "2023-06-26T10:51:31.799598",
-      "hexdigest": "9d5647457fb156d92263fcf1099e658b7e04e9743f13b9d36c5293fadf6fdaef"
+      "modified": "2023-07-13T13:35:39.348905",
+      "hexdigest": "36e72433f712753c8e906d8fc45998e467fcae5e77251fab764f922efab32faf"
     },
     {
       "path": "test/runtests.jl",
@@ -215,29 +211,77 @@
       ],
       "modified": "2023-06-26T13:55:43.994781",
       "hexdigest": "a3621331ccd42fb70f64861110d721da47ea67ec65006d73a49a5417fd03895c"
+    },
+    {
+      "path": "docs/intro-to-julia.md",
+      "deps": null,
+      "modified": "2023-07-16T10:11:39.200328",
+      "hexdigest": "1172c207d9726e96b1ea138e591b063c91c5c8e3d0f315fafdf738a870ef4304"
+    },
+    {
+      "path": "docs/bosscher-1992.md",
+      "deps": null,
+      "modified": "2023-07-17T00:21:49.950995",
+      "hexdigest": "7ce7c4e02189c5e9dbb32c2476e54e67d689c589e082a023df00d8b5559b2df7"
+    },
+    {
+      "path": "src/figures/bs92-fig2.gnuplot",
+      "deps": [
+        "docs/bosscher-1992.md"
+      ],
+      "modified": "2023-07-13T13:46:39.846434",
+      "hexdigest": "17b671d2dac3e0e55b7b4231c49c6c1072790fe65b84bf336d6c6c5bd9f4c3df"
+    },
+    {
+      "path": "src/BS92.jl",
+      "deps": [
+        "docs/bosscher-1992.md"
+      ],
+      "modified": "2023-07-16T21:38:35.431046",
+      "hexdigest": "474769634d2dfbf7382ca7c4ce74e5eb7f74526e3eb1d11ed0e9ff7af8ce5568"
+    },
+    {
+      "path": "src/BS92/fig8-sealevel.jl",
+      "deps": [
+        "docs/bosscher-1992.md"
+      ],
+      "modified": "2023-07-16T16:27:42.242140",
+      "hexdigest": "645c89b0882f0bf4ee6fb3c40c03354662aab0f86ab3208b43bb5c8a171b6d60"
+    },
+    {
+      "path": "src/BS92/fig8.jl",
+      "deps": [
+        "docs/bosscher-1992.md"
+      ],
+      "modified": "2023-07-16T23:38:52.856368",
+      "hexdigest": "fba439923ebf9c2d26099a084fa686cd3e1025961109a7cf383fee94a3ba6ac2"
     }
   ],
   "source": [],
   "target": [
-    "src/figures/ca.jl",
-    "src/Burgess2013/Transport.jl",
-    "test/runtests.jl",
-    "src/Burgess2013/Config.jl",
-    "src/Daisy/SingleSpecies.jl",
-    "src/Utility.jl",
-    "figures.mk",
-    "src/examples/eca.jl",
-    "src/MindTheGap.jl",
-    "src/figures/plot-tanh.gnuplot",
-    "src/examples/game-of-life.jl",
-    "src/Daisy.jl",
-    "src/Burgess2013/Production.jl",
+    "src/figures/burgess2013-fig2.gnuplot",
     "src/scripts/Power.jl",
-    "src/Burgess2013.jl",
+    "src/Daisy/SingleSpecies.jl",
+    "src/BS92/fig8-sealevel.jl",
+    "figures.mk",
     "src/Stencil.jl",
-    "src/examples/convolution.jl",
-    "src/RandomFields.jl",
+    "src/figures/plot-tanh.gnuplot",
+    "src/Utility.jl",
+    "src/figures/bs92-fig2.gnuplot",
+    "src/examples/eca.jl",
     "src/Burgess2013/CA.jl",
-    "src/figures/burgess2013-fig2.gnuplot"
+    "src/BS92/fig8.jl",
+    "src/figures/ca.jl",
+    "src/RandomFields.jl",
+    "src/MindTheGap.jl",
+    "src/Burgess2013/Config.jl",
+    "src/BS92.jl",
+    "src/Burgess2013.jl",
+    "src/Burgess2013/Production.jl",
+    "src/Burgess2013/Transport.jl",
+    "src/examples/game-of-life.jl",
+    "test/runtests.jl",
+    "src/examples/convolution.jl",
+    "src/Daisy.jl"
   ]
 }

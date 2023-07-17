@@ -3,8 +3,12 @@ module Production
 
 using ..Config: Species, Iₖ, k, gₘ
 
-# ~/~ begin <<docs/carbocat.md#carbonate-production>>[init]
-g(gₘ, I₀, Iₖ, k, w) = gₘ * tanh(I₀/Iₖ * exp(-w * k))
+# ~/~ begin <<docs/bosscher-1992.md#carbonate-production>>[init]
+g(gₘ, I₀, Iₖ, k, w) = if w > 0.0
+     gₘ * tanh(I₀/Iₖ * exp(-w * k))
+else
+     0.0
+end
 # ~/~ end
 
 function production_rate(I₀::Float64, s::Species, w::Float64)

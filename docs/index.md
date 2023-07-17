@@ -14,6 +14,7 @@ include("./Stencil.jl")
 include("./Burgess2013.jl")
 include("./Utility.jl")
 include("./RandomFields.jl")
+include("./BS92.jl")
 
 end
 ```

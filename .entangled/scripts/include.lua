@@ -11,5 +11,10 @@ function Para(elem)
     end
     filename = elem.content[3].text
     content = io.input(filename):read("a")
-    return pandoc.read(content).blocks
+    if filename:sub(-2) == "md" then
+        return pandoc.read(content).blocks
+    end
+    if filename:sub(-4) == "html" then
+        return pandoc.RawBlock("html", content)
+    end
 end
