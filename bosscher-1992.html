@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>CarboKitten</title>
+  <title>Carbonate Production</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -156,14 +156,13 @@ function openTab(evt, cityName) {
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">CarboKitten</h1>
-<p class="subtitle">reproducing Bosscher 1992</p>
+<h1 class="title">Carbonate Production</h1>
 </header>
 
 <div class="row">
 <div class="col-3 col-s-6" id="contents">
 <ul>
-<li><a href="bosscher-1992.html">reproducing Bosscher 1992</a></li>
+<li><a href="bosscher-1992.html"></a></li>
 <li><a href="carbocat.html">CarboCAT in Julia</a></li>
 <li><a href="carbocat-transport.html">Sediment Transport</a></li>
 <li><a href="daisy-world.html">reading notes on Wood’s 2008
@@ -195,7 +194,7 @@ is a measure of the extinction of photosynthetically active radiation
 oceanic waters ranges from <span class="math inline">\(0.04\)</span> to
 <span class="math inline">\(0.16\ {\rm m^{-1}}\)</span> (Jerlov, 1976);
 reported values for reef waters also lie within this range (Brakel,
-1979; Van den Hoek et al., 1975; Weinberg, 1976; Chalker, 1981 ; Porter,
+1979; Van den Hoek et al., 1975; Weinberg, 1976; Chalker, 1981; Porter,
 1985).</li>
 <li><span class="math inline">\(I_0\)</span> surface light intensity.
 The light intensity at the water surface at midday in the tropics lies
@@ -204,123 +203,160 @@ m^{-2}s^{-1}}\)</span>.</li>
 <li><span class="math inline">\(I_k\)</span> saturating light intensity.
 Light saturating intensities are in the range <span
 class="math inline">\(50-450\ {\rm \mu E\ m^{-2}s^{-1}}\)</span>,
-depending on speciesand water depth (Chalker, 1981 ;Wyman et al., 1987).
-Photoadaptationof reef-building corals has not been taken into account.
-More generally, light does not become a limiting factor for coral growth
-until it reaches roughtly 10% of its surface value (B. E. Chalker, in
-Done, 1983).</li>
+depending on species and water depth (Chalker, 1981; Wyman et al.,
+1987). Photoadaptation of reef-building corals has not been taken into
+account. More generally, light does not become a limiting factor for
+coral growth until it reaches roughly 10% of its surface value (B. E.
+Chalker, in Done, 1983). <em>from BS92</em></li>
 </ul>
 </blockquote>
-<p><img src="fig/bs92-fig2.svg" /></p>
-<div class="named-code-block">
-<div class="code-block-title">
-file:src/figures/bs92-fig2.gnuplot
-</div>
-<pre class="gnuplot"><code>set term svg
-set xrange [-100:2000]
-set yrange [50:0]
-set ylabel &quot;depth (m)&quot;
-set xlabel &quot;intensity&quot;
-
-set arrow from 20, 45 to 20, 0 nohead
-set arrow from 20, 45 to 2000, 45 nohead
-
-set parametric
-set trange [0:50]
-plot 2000*exp(-0.1 * t), t w l, \
-     1400*tanh(2000*exp(-0.1*t) / 400), t w l</code></pre>
-</div>
-<div class="named-code-block">
-<div class="code-block-title">
-«build»
-</div>
-<pre class="make"><code>targets += $(fig)/bs92-fig2.svg
-
-$(fig)/bs92-fig2.svg: src/figures/bs92-fig2.gnuplot
-&gt; @mkdir -p $(@D)
-&gt; gnuplot $&lt; &gt; $@</code></pre>
-</div>
+</section>
+<section id="growth-rate" class="level2">
+<h2>Growth Rate</h2>
 <p>The growth rate is</p>
-<p><span class="math display">\[g(w) = g_m {\rm tanh}\left({{I_0
-e^{-kw}} \over {I_k}}\right),\]</span></p>
+<p><span id="eq:growth-function" class="equation"><span
+class="math display">\[g(w) = g_m \tanh\left({{I_0 e^{-kw}} \over
+{I_k}}\right),\]</span><span
+class="equation-number">(1)</span></span></p>
+<div class="named-code-block">
+<div class="code-block-title">
+«carbonate-production»
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">g</span>(gₘ, I₀, Iₖ, k, w) <span class="op">=</span> gₘ <span class="op">*</span> <span class="fu">tanh</span>(I₀<span class="op">/</span>Iₖ <span class="op">*</span> <span class="fu">exp</span>(<span class="op">-</span>w <span class="op">*</span> k))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Parameters</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     I₀<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>     Iₖ<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>     k<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>     gₘ<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">g</span>(p<span class="op">::</span><span class="dt">Parameters</span>, w) <span class="op">=</span> <span class="fu">g</span>(p.gₘ, p.I₀, p.Iₖ, p.k, w)</span></code></pre></div>
+</div>
 <p>where <span class="math inline">\(w\)</span> is the water depth in
 meters, <span class="math inline">\(g_m\)</span> is the maximum growth
 rate in <span class="math inline">\({\rm m}\ {\rm My}^-1\)</span>, <span
 class="math inline">\(I_0\)</span> is surface light intensity, <span
 class="math inline">\(I_k\)</span> is saturation light intensity, and
-<span class="math inline">\(k\)</span> is the extinction
-coefficient.</p>
-<p>The water depth is a strange way of writing things down. Plots are
-upside down, growth in deposition should give shallower sea bed. BS92
-write <span class="math inline">\((h_0 + h(t)) - (s_0 + s(t))\)</span>.
-Actually <span class="math inline">\(s_0\)</span> is best set to 0, or
-simply included into <span class="math inline">\(s(t)\)</span> and <span
+<span class="math inline">\(k\)</span> is the extinction coefficient. We
+have exponential decay of light intensity as we get to deeper water, and
+the carbonate factories respond to light intensity through a <span
+class="math inline">\(\tanh\)</span> (hyperbolic tangent function). This
+is by no means an exact relation, rather the <span
+class="math inline">\(\tanh\)</span> function interpolates smoothly
+between one and zero. We specify a maximum growth rate and a typical
+intensity at which the species is no longer productive.</p>
+<p>The shape of <span class="math inline">\(\tanh \circ \exp\)</span>
+look like this:</p>
+<p><img src="fig/tanh.svg" /></p>
+<p>Notice that the numbers inside the exponential need to be unit-free,
+so does the output. The value of <span class="math inline">\(\tanh \circ
+\exp\)</span> at a depth of 0 is <span
+class="math inline">\(0.7615\dots\)</span>. This does not make much
+sense, as I believe we should start at a value of 1 at the surface. By
+setting <span class="math inline">\(I_0 / I_k\)</span> to some value
+<span class="math inline">\(&gt;1\)</span> this can be alleviated, but
+it changes the interpretation of the constants a little. The idea is
+that above a certain insolation, light is not the limiting factor to the
+rate of photosynthesis.</p>
+<p>To reproduce Figure 2 in B13, I had to change the values for <span
+class="math inline">\(g_m\)</span> to 500, 250, and 125 respectively,
+the other values from Table 2 remained the same. I guess this was done
+for illustration purposes.</p>
+<p><img src="fig/burgess2013-fig2.svg" /></p>
+<details>
+<summary>
+Plotting code
+</summary>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/figures/plot-tanh.gnuplot
+</div>
+<pre class="gnuplot"><code>set term svg size 700, 300 font &quot;sans serif, 14&quot; linewidth 1.5
+set xrange [-5:10]
+set yrange [-0.1:1.1]
+set grid
+set key outside
+set xlabel &quot;x&quot;
+set ylabel &quot;y&quot;
+plot tanh(exp(-x)) lc rgb &#39;black&#39;, tanh(exp(4)*exp(-x)), tanh(exp(-0.5*x))</code></pre>
+</div>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/figures/burgess2013-fig2.gnuplot
+</div>
+<pre class="gnuplot"><code>set term svg size 500, 600 font &quot;sans serif,14&quot; linewidth 1.5
+set trange [0:100]
+set yrange [100:0]
+set xrange [-20:520]
+set parametric
+set key right bottom
+set grid
+set ylabel &quot;Water depth (m)&quot;
+set xlabel &quot;Production rates&quot;
+plot 500*tanh(6.7 * exp(-0.8 * t)), t title &#39;Carbonate factory 1&#39;, \
+     250*tanh(6.7 * exp(-0.1 * t)), t title &#39;Carbonate factory 2&#39;, \
+     125*tanh(6.7 * exp(-0.005 * t)), t title &#39;Carbonate factory 3&#39;</code></pre>
+</div>
+<div class="named-code-block">
+<div class="code-block-title">
+«plot-tanh»
+</div>
+<pre class="make"><code>.RECIPEPREFIX = &gt;
+.PHONY: all
+
+all: docs/fig/burgess2013-fig2.svg docs/fig/tanh.svg
+
+docs/fig/burgess2013-fig2.svg: src/figures/burgess2013-fig2.gnuplot
+&gt; @mkdir -p $(@D)
+&gt; gnuplot $&lt; &gt; $@
+
+docs/fig/tanh.svg: src/figures/plot-tanh.gnuplot
+&gt; @mkdir -p $(@D)
+&gt; gnuplot $&lt; &gt; $@</code></pre>
+</div>
+</details>
+</section>
+<section id="depth-evolution" class="level2">
+<h2>Depth Evolution</h2>
+<p>The use of water depth in both BS92 and B13 can be a bit confusing.
+Plots are shown up-side-down and little is done to disambiguate depth
+with sea level rising or lowering, or sediment accreting. Growth in
+deposition should give shallower sea bed. BS92 write <span
+class="math inline">\(w = (h_0 + h(t)) - (s_0 + s(t))\)</span>. Actually
+<span class="math inline">\(s_0\)</span> is best set to 0, or simply
+included into <span class="math inline">\(s(t)\)</span> and <span
 class="math inline">\(h_0\)</span> can be replaced with setting <span
 class="math inline">\(h(t=0) = h_0\)</span>. Then, as we have the growth
 rate as a function of water depth <span
 class="math inline">\(g(w)\)</span>, we can say</p>
-<p><span class="math display">\[\partial_t h = -g_m {\rm tanh}(I_0 / I_k
-(\exp(-k (h - s(t))))).\]</span></p>
+<p><span id="eq:growth-eqn" class="equation"><span
+class="math display">\[\partial_t h = -g_m {\rm
+tanh}\left[\frac{I_0}{I_k} \exp(-k (h - s(t)))\right].\]</span><span
+class="equation-number">(2)</span></span></p>
 <div class="named-code-block">
 <div class="code-block-title">
-file:src/BS92.jl
+«carbonate-production»
 </div>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> BS92</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DifferentialEquations</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Interpolations</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sealevel_curve</span>()</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>     data <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/bs92-sealevel-curve.csv&quot;</span>))</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>     <span class="co">#scale(interpolate(data.depth, BSpline(Cubic())), LinRange(0.0, 80_000.0, 862))</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">linear_interpolation</span>(data.time, data.depth)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>carbonate<span class="op">-</span>production<span class="op">&gt;&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Parameters</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>     I₀<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>     Iₖ<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>     k<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>     gₘ<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">g</span>(p<span class="op">::</span><span class="dt">Parameters</span>, w) <span class="op">=</span> <span class="fu">g</span>(p.gₘ, p.I₀, p.Iₖ, p.k, w)</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">model</span>(p<span class="op">::</span><span class="dt">Parameters</span>, s, t_end<span class="op">::</span><span class="dt">Float64</span>, h₀<span class="op">::</span><span class="dt">Float64</span>)</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>     <span class="fu">∂h</span>(h<span class="op">::</span><span class="dt">Float64</span>, _, t<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">-g</span>(p, h <span class="op">-</span> <span class="fu">s</span>(t))</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>     ode <span class="op">=</span> <span class="fu">ODEProblem</span>(∂h, h₀, (<span class="fl">0.0</span>, t_end), <span class="dt">Nothing</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>     <span class="co">#solve(ode, AutoTsit5(Rosenbrock23()), reltol=1e-8, saveat=1000.0)</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>     <span class="fu">solve</span>(ode, <span class="fu">Euler</span>(), dt<span class="op">=</span><span class="fl">10.0</span>, reltol<span class="op">=</span><span class="fl">1e-6</span>, saveat<span class="op">=</span><span class="fl">1000.0</span>)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Scenario</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>     param<span class="op">::</span><span class="dt">Parameters</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>     sealevel</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>     t_end<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span>(s<span class="op">::</span><span class="dt">Scenario</span>, h₀<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">model</span>(s.param, s.sealevel, s.t_end, h₀)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>SCENARIO_A <span class="op">=</span> <span class="fu">Scenario</span>(</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>     <span class="fu">Parameters</span>(<span class="fl">2000.0</span>, <span class="fl">250.0</span>, <span class="fl">0.05</span>, <span class="fl">0.005</span>),</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>     <span class="fu">sealevel_curve</span>(),</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>     <span class="fl">80_000.0</span>)</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>SCENARIO_B <span class="op">=</span> <span class="fu">Scenario</span>(</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>     <span class="fu">Parameters</span>(<span class="fl">2000.0</span>, <span class="fl">250.0</span>, <span class="fl">0.05</span>, <span class="fl">0.005</span>),</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>     <span class="kw">let</span> sc <span class="op">=</span> <span class="fu">sealevel_curve</span>()</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>          x <span class="op">-&gt;</span> <span class="fu">sc</span>(x) <span class="op">*</span> <span class="fl">0.9</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>     <span class="kw">end</span>,</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>     <span class="fl">80_000.0</span>)</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">model</span>(p<span class="op">::</span><span class="dt">Parameters</span>, s, t_end<span class="op">::</span><span class="dt">Float64</span>, h₀<span class="op">::</span><span class="dt">Float64</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">∂h</span>(h<span class="op">::</span><span class="dt">Float64</span>, _, t<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="kw">let</span> w <span class="op">=</span> h <span class="op">-</span> <span class="fu">s</span>(t)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>          w <span class="op">&gt;=</span> <span class="fl">0.0</span> ? <span class="fu">-g</span>(p, h <span class="op">-</span> <span class="fu">s</span>(t)) <span class="op">:</span> <span class="fl">0.0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>     <span class="kw">end</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>     ode <span class="op">=</span> <span class="fu">ODEProblem</span>(∂h, h₀, (<span class="fl">0.0</span>, t_end), <span class="dt">Nothing</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">solve</span>(ode, <span class="fu">Euler</span>(), dt<span class="op">=</span><span class="fl">10.0</span>, reltol<span class="op">=</span><span class="fl">1e-6</span>, saveat<span class="op">=</span><span class="fl">1000.0</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </div>
-<p>Finally, we can try to reproduce figure 8 in BS92. They show an input
-curve for <span class="math inline">\(s(t)\)</span> but give no
+<p>It seems Eq. 5 in BS92 (the most important equation in the paper mind
+you!) is missing both a minus sign and a set of parentheses. Also, we
+should remark that at negative depth (subareal exposure) we should halt
+all growth.</p>
+</section>
+<section id="crosssection" class="level2">
+<h2>Crosssection</h2>
+<p>The most impressive result in BS92 is the last figure. They show an
+input curve for <span class="math inline">\(s(t)\)</span> but give no
 functional description. The curve starts with a linear drop from 0 to
 120m depth over a time of 20000 years, then slowly rises with <span
 class="math inline">\(s(t) = a + bt + A \sin(2\pi t / P)\)</span>, with
@@ -328,6 +364,78 @@ a period <span class="math inline">\(P = \sim 15-20 {\rm kyr}\)</span>,
 amplitude <span class="math inline">\(A = \sim 40 {\rm m}\)</span>. It
 might be easiest to take a screenshot of the PDF and convert the graph
 into a table.</p>
+<div>
+<details><summary>
+<span>Extracting Sealevel Curve from an image</span>
+</summary>
+<div>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/BS92/fig8-sealevel.jl
+</div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Images</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">main</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> <span class="fu">load</span>(<span class="st">&quot;data/bs92-sealevel-input.png&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    img_gray <span class="op">=</span> <span class="fu">Gray</span>.(img)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    signal <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.-</span> <span class="fu">channelview</span>(img_gray)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    signal <span class="op">./=</span> <span class="fu">sum</span>(signal; dims<span class="op">=</span>[<span class="fl">1</span>])</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    (n_y, n_x) <span class="op">=</span> <span class="fu">size</span>(signal)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="fu">sum</span>(signal <span class="op">.*</span> (<span class="fl">1</span><span class="op">:</span>n_y); dims<span class="op">=</span>[<span class="fl">1</span>]) <span class="op">/</span> n_y <span class="op">*</span> <span class="fl">200.0</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        time <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0.0</span>, <span class="fl">80_000.0</span>, n_x),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        depth <span class="op">=</span> y[<span class="fl">1</span>, <span class="op">:</span>])</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    CSV.<span class="fu">write</span>(<span class="st">&quot;data/bs92-sealevel-curve.csv&quot;</span>, df)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">main</span>()</span></code></pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Using <code>DifferentialEquations.jl</code> we can integrate Equation
+<a href="#eq:growth-eqn">(2)</a>. Interestingly, the only integrator
+that gave me noise free results is <code>Euler</code>. This may be due
+to the sudden shut-down of production at <span class="math inline">\(w =
+0\)</span>.</p>
+<div class="named-code-block">
+<div class="code-block-title">
+file:src/BS92.jl
+</div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> BS92</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DifferentialEquations</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Interpolations</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;</span>carbonate<span class="op">-</span>production<span class="op">&gt;&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sealevel_curve</span>()</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>     data <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/bs92-sealevel-curve.csv&quot;</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">linear_interpolation</span>(data.time, data.depth)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Scenario</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>     param<span class="op">::</span><span class="dt">Parameters</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>     sealevel</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>     t_end<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span>(s<span class="op">::</span><span class="dt">Scenario</span>, h₀<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">model</span>(s.param, s.sealevel, s.t_end, h₀)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>SCENARIO_A <span class="op">=</span> <span class="fu">Scenario</span>(</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>     <span class="fu">Parameters</span>(<span class="fl">2000.0</span>, <span class="fl">250.0</span>, <span class="fl">0.05</span>, <span class="fl">0.005</span>),</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>     <span class="fu">sealevel_curve</span>(),</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>     <span class="fl">80_000.0</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+</div>
+<p>Finally, we can try to reproduce figure 8 in BS92.</p>
 <script src="https://cdn.plot.ly/plotly-2.6.3.min.js"></script>    <div id="d6b576d9-c3da-4a1c-a432-09505ffacaf7" style="width:700px;height:700px;"></div>
     <script>
     
@@ -19146,221 +19254,55 @@ into a table.</p>
     
     </script>
 
-<details>
-<summary>
-Plotting code
+<p>Note the simplicity of this result: there is no dependency on space,
+only on the initial depth <span class="math inline">\(h_0\)</span>.</p>
+<div>
+<details><summary>
+<span>Plotting code</span>
 </summary>
-<div class="named-code-block">
-<div class="code-block-title">
-file:src/BS92/fig8-sealevel.jl
-</div>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Images</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">main</span>()</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> <span class="fu">load</span>(<span class="st">&quot;data/bs92-sealevel-input.png&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    img_gray <span class="op">=</span> <span class="fu">Gray</span>.(img)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    signal <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.-</span> <span class="fu">channelview</span>(img_gray)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    signal <span class="op">./=</span> <span class="fu">sum</span>(signal; dims<span class="op">=</span>[<span class="fl">1</span>])</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    (n_y, n_x) <span class="op">=</span> <span class="fu">size</span>(signal)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="fu">sum</span>(signal <span class="op">.*</span> (<span class="fl">1</span><span class="op">:</span>n_y); dims<span class="op">=</span>[<span class="fl">1</span>]) <span class="op">/</span> n_y <span class="op">*</span> <span class="fl">200.0</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        time <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0.0</span>, <span class="fl">80_000.0</span>, n_x),</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        depth <span class="op">=</span> y[<span class="fl">1</span>, <span class="op">:</span>])</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    CSV.<span class="fu">write</span>(<span class="st">&quot;data/bs92-sealevel-curve.csv&quot;</span>, df)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">main</span>()</span></code></pre></div>
-</div>
+<div>
 <div class="named-code-block">
 <div class="code-block-title">
 file:src/BS92/fig8.jl
 </div>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.BS92</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">main</span>()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>     h0 <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">200</span>, <span class="fl">101</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     result <span class="op">=</span> <span class="fu">hcat</span>([BS92.<span class="fu">model</span>(BS92.SCENARIO_A, h).u for h <span class="kw">in</span> h0]<span class="op">...</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     t <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">80_000</span>, <span class="fl">81</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plotlyjs</span>()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot</span>(h0, result<span class="op">&#39;</span>,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>          xaxis<span class="op">=</span>(<span class="st">&quot;initial depth (m)&quot;</span>),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>          yaxis<span class="op">=</span>(<span class="st">&quot;depth (m)&quot;</span>, <span class="op">:</span>flip),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>          legend_position<span class="op">=:</span>none, lc<span class="op">=:</span>steelblue,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>          size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">700</span>), fontfamily<span class="op">=</span><span class="st">&quot;Merriweather,serif&quot;</span>)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot!</span>(t, BS92.SCENARIO_A.<span class="fu">sealevel</span>(t),</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>          title<span class="op">=</span><span class="st">&quot;sea level curve&quot;</span>, titlelocation<span class="op">=:</span>left,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>          titlefontsize<span class="op">=</span><span class="fl">12</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>          xaxis<span class="op">=</span>(<span class="st">&quot;time (years)&quot;</span>),</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>          yaxis<span class="op">=</span>(<span class="st">&quot;depth (m)&quot;</span>, <span class="op">:</span>flip),</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>          guidefontsize<span class="op">=</span><span class="fl">10</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>          legend_position<span class="op">=:</span>none,</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>          lc<span class="op">=:</span>steelblue,</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>          inset<span class="op">=</span>(<span class="fl">1</span>, <span class="fu">bbox</span>(<span class="fl">0.11</span>, <span class="fl">0.60</span>, <span class="fl">0.45</span>, <span class="fl">0.28</span>)),</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>          subplot<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>          framestyle<span class="op">=:</span>box)</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>     <span class="fu">savefig</span>(<span class="st">&quot;docs/fig/bs92-fig8.html&quot;</span>)</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.BS92</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">main</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>     h0 <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">200</span>, <span class="fl">101</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     result <span class="op">=</span> <span class="fu">hcat</span>([BS92.<span class="fu">model</span>(BS92.SCENARIO_A, h).u for h <span class="kw">in</span> h0]<span class="op">...</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     t <span class="op">=</span> <span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">80_000</span>, <span class="fl">81</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plotlyjs</span>()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot</span>(h0, result<span class="op">&#39;</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>          xaxis<span class="op">=</span>(<span class="st">&quot;initial depth (m)&quot;</span>),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>          yaxis<span class="op">=</span>(<span class="st">&quot;depth (m)&quot;</span>, <span class="op">:</span>flip),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>          legend_position<span class="op">=:</span>none, lc<span class="op">=:</span>steelblue,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>          size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">700</span>), fontfamily<span class="op">=</span><span class="st">&quot;Merriweather,serif&quot;</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot!</span>(t, BS92.SCENARIO_A.<span class="fu">sealevel</span>(t),</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>          title<span class="op">=</span><span class="st">&quot;sea level curve&quot;</span>, titlelocation<span class="op">=:</span>left,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>          titlefontsize<span class="op">=</span><span class="fl">12</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>          xaxis<span class="op">=</span>(<span class="st">&quot;time (years)&quot;</span>),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>          yaxis<span class="op">=</span>(<span class="st">&quot;depth (m)&quot;</span>, <span class="op">:</span>flip),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>          guidefontsize<span class="op">=</span><span class="fl">10</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>          legend_position<span class="op">=:</span>none,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>          lc<span class="op">=:</span>steelblue,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>          inset<span class="op">=</span>(<span class="fl">1</span>, <span class="fu">bbox</span>(<span class="fl">0.11</span>, <span class="fl">0.60</span>, <span class="fl">0.45</span>, <span class="fl">0.28</span>)),</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>          subplot<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>          framestyle<span class="op">=:</span>box)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>     <span class="fu">savefig</span>(<span class="st">&quot;docs/fig/bs92-fig8.html&quot;</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+</div>
 </div>
 </details>
+</div>
 </section>
-<section id="carbonate-production-in-carbocat" class="level2">
-<h2>Carbonate production in CarboCAT</h2>
-<p>In CarboCAT some paramaters are estimated a bit different from
-BS92.</p>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>parameter</th>
-<th>reasonable (BS92)</th>
-<th>estimate (Burgess2013)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(g_m\)</span></td>
-<td><span class="math inline">\(10-15\ {\rm mm}\ {\rm
-y}^{-1}\)</span></td>
-<td><span class="math inline">\(500, 400, 100\ {\rm m}\ {\rm
-My}^{-1}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(I_0\)</span></td>
-<td><span class="math inline">\(2000-2250\)</span></td>
-<td><span class="math inline">\(2000\ {\rm \mu E}\ {\rm m}^{-2}\ {\rm
-s}^{-1}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(I_k\)</span></td>
-<td><span class="math inline">\(50-450\)</span></td>
-<td><span class="math inline">\(300\ {\rm \mu E}\ {\rm m}^{-2}\ {\rm
-s}^{-1}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(k\)</span></td>
-<td><span class="math inline">\(0.04-0.16\ {\rm m}^{-1}\)</span></td>
-<td><span class="math inline">\(0.8, 0.1, 0.005\)</span> no unit
-given</td>
-</tr>
-</tbody>
-</table>
-<p>Each species in the CA produces a form of carbonate. We may assume a
-one-to-one correspondence between coral species and a carbonate type
-(lythofacies). The assumption is made that the carbonate production
-depends on the water depth as (Bosscher and Schlager 1992),</p>
-<p><span class="math display">\[g = g_m {\rm tanh}\left({{I_0 e^{-kw}}
-\over {I_k}}\right),\]</span></p>
-<p>where <span class="math inline">\(w\)</span> is the water depth in
-meters, <span class="math inline">\(g_m\)</span> is the maximum growth
-rate in <span class="math inline">\({\rm m}\ {\rm My}^-1\)</span>, <span
-class="math inline">\(I_0\)</span> is surface light intensity, <span
-class="math inline">\(I_k\)</span> is saturation light intensity, and
-<span class="math inline">\(k\)</span> is the extinction
-coefficient.</p>
-<div class="named-code-block">
-<div class="code-block-title">
-«carbonate-production»
-</div>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">g</span>(gₘ, I₀, Iₖ, k, w) <span class="op">=</span> <span class="cf">if</span> w <span class="op">&gt;</span> <span class="fl">0.0</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>     gₘ <span class="op">*</span> <span class="fu">tanh</span>(I₀<span class="op">/</span>Iₖ <span class="op">*</span> <span class="fu">exp</span>(<span class="op">-</span>w <span class="op">*</span> k))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.0</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
-</div>
-<p>The maximum growth rate should be on the order of a centimeter per
-year. That would translate to 10m in a millenium and 10km in a million
-years. Why are these values off by so much? The same goes for the
-extinction coefficient. <span class="math inline">\(I_0 / I_k\)</span>
-is collected into a rate constant of about <span
-class="math inline">\(6.7\)</span>. The growth rate still has to be
-converted into a carbonate accumulation, which should be much smaller
-due to compression and what not. There is a mistake in BS1992 equation
-5, there should be brackets around <span class="math inline">\([h_0 +
-h(t)] - [s_0 + s(t)]\)</span>.</p>
-<p>To understand, the shape of the production rate as a function of
-depth looks like this:</p>
-<p><img src="fig/tanh.svg" /></p>
-<p>Notice that the numbers inside the exponential need to be unit-free,
-so does the output. The value of <span class="math inline">\(\tanh \circ
-\exp\)</span> at a depth of 0 is <span
-class="math inline">\(0.7615\dots\)</span>. This does not make much
-sense, as I believe we should start at a value of 1 at the surface. By
-setting <span class="math inline">\(I_0 / I_k\)</span> to some value
-<span class="math inline">\(&gt;1\)</span> this can be alleviated, but
-it changes the interpretation of the constants a little. The idea is
-that above a certain insolation, light is not the limiting factor to the
-rate of photosynthesis.</p>
-<p>To reproduce Figure 2 in B13, I had to change the values for <span
-class="math inline">\(g_m\)</span> to 500, 250, and 125 respectively,
-the other values from Table 2 remained the same. I guess this was done
-for illustration purposes.</p>
-<p><img src="fig/burgess2013-fig2.svg" /></p>
-<details>
-<summary>
-Plotting code
-</summary>
-<div class="named-code-block">
-<div class="code-block-title">
-file:src/figures/plot-tanh.gnuplot
-</div>
-<pre class="gnuplot"><code>set term svg size 700, 300 font &quot;sans serif, 14&quot; linewidth 1.5
-set xrange [-5:10]
-set yrange [-0.1:1.1]
-set grid
-set key outside
-set xlabel &quot;x&quot;
-set ylabel &quot;y&quot;
-plot tanh(exp(-x)) lc rgb &#39;black&#39;, tanh(exp(4)*exp(-x)), tanh(exp(-0.5*x))</code></pre>
-</div>
-<div class="named-code-block">
-<div class="code-block-title">
-file:src/figures/burgess2013-fig2.gnuplot
-</div>
-<pre class="gnuplot"><code>set term svg size 500, 600 font &quot;sans serif,14&quot; linewidth 1.5
-set trange [0:100]
-set yrange [100:0]
-set xrange [-20:520]
-set parametric
-set key right bottom
-set grid
-set ylabel &quot;Water depth (m)&quot;
-set xlabel &quot;Production rates&quot;
-plot 500*tanh(6.7 * exp(-0.8 * t)), t title &#39;Carbonate factory 1&#39;, \
-     250*tanh(6.7 * exp(-0.1 * t)), t title &#39;Carbonate factory 2&#39;, \
-     125*tanh(6.7 * exp(-0.005 * t)), t title &#39;Carbonate factory 3&#39;</code></pre>
-</div>
-<div class="named-code-block">
-<div class="code-block-title">
-«plot-tanh»
-</div>
-<pre class="make"><code>.RECIPEPREFIX = &gt;
-.PHONY: all
-
-all: docs/fig/burgess2013-fig2.svg docs/fig/tanh.svg
-
-docs/fig/burgess2013-fig2.svg: src/figures/burgess2013-fig2.gnuplot
-&gt; @mkdir -p $(@D)
-&gt; gnuplot $&lt; &gt; $@
-
-docs/fig/tanh.svg: src/figures/plot-tanh.gnuplot
-&gt; @mkdir -p $(@D)
-&gt; gnuplot $&lt; &gt; $@</code></pre>
-</div>
-</details>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent"
 role="list">
 <div id="ref-Bosscher1992" class="csl-entry" role="listitem">
@@ -19374,9 +19316,11 @@ of Reef Growth.”</span> <em>Sedimentology</em> 39 (3): 503–12.
 <div id="menu" class="col-3 col-s-3 menu"><nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#parameters" id="toc-parameters">Parameters</a></li>
-<li><a href="#carbonate-production-in-carbocat"
-id="toc-carbonate-production-in-carbocat">Carbonate production in
-CarboCAT</a></li>
+<li><a href="#growth-rate" id="toc-growth-rate">Growth Rate</a></li>
+<li><a href="#depth-evolution" id="toc-depth-evolution">Depth
+Evolution</a></li>
+<li><a href="#crosssection" id="toc-crosssection">Crosssection</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
 </ul>
 </nav></div>
 </div>
