@@ -1,6 +1,6 @@
 ---
 title: Carbonate Production
-subtitale: reproducing Bosscher 1992
+subtitle: reproducing Bosscher 1992
 bibliography: [docs/ref.bib]
 ---
 
