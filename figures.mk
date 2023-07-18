@@ -16,13 +16,6 @@ docs/fig/burgess2013-fig3.svg: src/figures/ca.jl
 docs/fig/burgess2013-long-times.svg: src/figures/ca.jl
 > julia --project=. -e 'include("$<"); plot_long_times("$@")'
 # ~/~ end
-# ~/~ begin <<docs/bosscher-1992.md#build>>[0]
-targets += $(fig)/bs92-fig2.svg
-
-$(fig)/bs92-fig2.svg: src/figures/bs92-fig2.gnuplot
-> @mkdir -p $(@D)
-> gnuplot $< > $@
-# ~/~ end
 
 _all: $(targets)
 # ~/~ end

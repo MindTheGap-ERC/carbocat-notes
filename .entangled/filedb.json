@@ -10,25 +10,25 @@
     {
       "path": "docs/index.md",
       "deps": null,
-      "modified": "2023-07-16T17:02:37.552494",
+      "modified": "2023-07-17T11:18:25.252426",
       "hexdigest": "b12220dc47584ab4bd186944360e7cd66619c06210b2e29b08547648d954cac9"
     },
     {
       "path": "docs/stencils.md",
       "deps": null,
-      "modified": "2023-06-26T13:56:54.116105",
+      "modified": "2023-07-17T11:18:25.254426",
       "hexdigest": "6f0291972f1049afdb0125165db3537df50fecf7a111c8465db4edaa2009438c"
     },
     {
       "path": "docs/carbocat.md",
       "deps": null,
-      "modified": "2023-07-13T13:41:14.830190",
+      "modified": "2023-07-17T11:18:25.214426",
       "hexdigest": "d9fb55169a811f929620bf5db643dcda913f6ae188c58356a7eb994caef1668e"
     },
     {
       "path": "docs/utility.md",
       "deps": null,
-      "modified": "2023-06-20T08:49:55.445525",
+      "modified": "2023-07-17T11:18:25.254426",
       "hexdigest": "f3aa3714059726824061f7843df19fdcfeb4f6a9a9d42485304a11127d1e7d66"
     },
     {
@@ -61,8 +61,8 @@
         "docs/carbocat.md",
         "docs/bosscher-1992.md"
       ],
-      "modified": "2023-07-16T19:46:21.645683",
-      "hexdigest": "502965819e9b44715c8a503cc266af8b314f135e85588e37351480b9a362b5af"
+      "modified": "2023-07-17T16:55:16.655692",
+      "hexdigest": "45cae2650ccc0952616a5ae52f1d89c9430828c30cde09fd666f2aa44fd9ee1e"
     },
     {
       "path": "src/Utility.jl",
@@ -123,7 +123,7 @@
     {
       "path": "docs/daisy-world.md",
       "deps": null,
-      "modified": "2023-06-25T17:01:18.089620",
+      "modified": "2023-07-17T11:18:25.214426",
       "hexdigest": "0d0164c086e1aaf8580ab762f2d59f043e1c052596d1e5e718146ea5a345b3d0"
     },
     {
@@ -153,7 +153,7 @@
     {
       "path": "docs/carbocat-transport.md",
       "deps": null,
-      "modified": "2023-06-20T15:53:40.686182",
+      "modified": "2023-07-17T11:18:25.214426",
       "hexdigest": "df81ed621a6e992dc6b60b71fadc77e6cc3ca93c6c6d8ef62de9bf20b6b7a0ca"
     },
     {
@@ -183,7 +183,7 @@
     {
       "path": "docs/random-fields.md",
       "deps": null,
-      "modified": "2023-06-25T16:33:27.796824",
+      "modified": "2023-07-17T11:18:25.253426",
       "hexdigest": "1638353dd7e421cb4acd5b2ecd571985d3ccb435a1204ca0d11301e0f711fc76"
     },
     {
@@ -197,11 +197,10 @@
     {
       "path": "figures.mk",
       "deps": [
-        "docs/bosscher-1992.md",
         "docs/carbocat.md"
       ],
-      "modified": "2023-07-13T13:35:39.348905",
-      "hexdigest": "36e72433f712753c8e906d8fc45998e467fcae5e77251fab764f922efab32faf"
+      "modified": "2023-07-17T14:36:05.198648",
+      "hexdigest": "837931b02305bc3e5f4505b357ffd0d263524dff23c0438759e2ef4b9ebbfb58"
     },
     {
       "path": "test/runtests.jl",
@@ -215,30 +214,22 @@
     {
       "path": "docs/intro-to-julia.md",
       "deps": null,
-      "modified": "2023-07-16T10:11:39.200328",
+      "modified": "2023-07-17T11:18:25.253426",
       "hexdigest": "1172c207d9726e96b1ea138e591b063c91c5c8e3d0f315fafdf738a870ef4304"
     },
     {
       "path": "docs/bosscher-1992.md",
       "deps": null,
-      "modified": "2023-07-17T00:21:49.950995",
-      "hexdigest": "7ce7c4e02189c5e9dbb32c2476e54e67d689c589e082a023df00d8b5559b2df7"
-    },
-    {
-      "path": "src/figures/bs92-fig2.gnuplot",
-      "deps": [
-        "docs/bosscher-1992.md"
-      ],
-      "modified": "2023-07-13T13:46:39.846434",
-      "hexdigest": "17b671d2dac3e0e55b7b4231c49c6c1072790fe65b84bf336d6c6c5bd9f4c3df"
+      "modified": "2023-07-18T10:58:38.960418",
+      "hexdigest": "913bc219da4e71941df45f4dda91ab9708e8011c7f6a8bffc4a6b89e3f60d154"
     },
     {
       "path": "src/BS92.jl",
       "deps": [
         "docs/bosscher-1992.md"
       ],
-      "modified": "2023-07-16T21:38:35.431046",
-      "hexdigest": "474769634d2dfbf7382ca7c4ce74e5eb7f74526e3eb1d11ed0e9ff7af8ce5568"
+      "modified": "2023-07-17T16:55:16.654692",
+      "hexdigest": "acb2fde751bcca3d168f2fb51399082c448fc74709fd50d966f8a343ca146017"
     },
     {
       "path": "src/BS92/fig8-sealevel.jl",
@@ -259,29 +250,28 @@
   ],
   "source": [],
   "target": [
-    "src/figures/burgess2013-fig2.gnuplot",
-    "src/scripts/Power.jl",
-    "src/Daisy/SingleSpecies.jl",
-    "src/BS92/fig8-sealevel.jl",
-    "figures.mk",
-    "src/Stencil.jl",
-    "src/figures/plot-tanh.gnuplot",
-    "src/Utility.jl",
-    "src/figures/bs92-fig2.gnuplot",
-    "src/examples/eca.jl",
-    "src/Burgess2013/CA.jl",
-    "src/BS92/fig8.jl",
-    "src/figures/ca.jl",
     "src/RandomFields.jl",
-    "src/MindTheGap.jl",
-    "src/Burgess2013/Config.jl",
-    "src/BS92.jl",
+    "src/BS92/fig8-sealevel.jl",
     "src/Burgess2013.jl",
-    "src/Burgess2013/Production.jl",
+    "figures.mk",
+    "src/BS92.jl",
+    "src/BS92/fig8.jl",
     "src/Burgess2013/Transport.jl",
-    "src/examples/game-of-life.jl",
+    "src/scripts/Power.jl",
+    "src/Daisy.jl",
     "test/runtests.jl",
+    "src/examples/eca.jl",
+    "src/figures/ca.jl",
     "src/examples/convolution.jl",
-    "src/Daisy.jl"
+    "src/figures/plot-tanh.gnuplot",
+    "src/Burgess2013/Config.jl",
+    "src/Burgess2013/CA.jl",
+    "src/Daisy/SingleSpecies.jl",
+    "src/Stencil.jl",
+    "src/Utility.jl",
+    "src/Burgess2013/Production.jl",
+    "src/MindTheGap.jl",
+    "src/examples/game-of-life.jl",
+    "src/figures/burgess2013-fig2.gnuplot"
   ]
 }
