@@ -6,8 +6,10 @@ using CSV
 using DataFrames
 using Interpolations
 
+# ~/~ begin <<docs/bosscher-1992.md#b92-model>>[init]
 # ~/~ begin <<docs/bosscher-1992.md#carbonate-production>>[init]
 g(gₘ, I₀, Iₖ, k, w) = gₘ * tanh(I₀/Iₖ * exp(-w * k))
+# ~/~ end
 
 struct Parameters
      I₀::Float64
@@ -18,7 +20,7 @@ end
 
 g(p::Parameters, w) = g(p.gₘ, p.I₀, p.Iₖ, p.k, w)
 # ~/~ end
-# ~/~ begin <<docs/bosscher-1992.md#carbonate-production>>[1]
+# ~/~ begin <<docs/bosscher-1992.md#b92-model>>[1]
 function model(p::Parameters, s, t_end::Float64, h₀::Float64)
      ∂h(h::Float64, _, t::Float64) = let w = h - s(t)
           w >= 0.0 ? -g(p, h - s(t)) : 0.0

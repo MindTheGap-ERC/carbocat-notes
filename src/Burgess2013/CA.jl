@@ -1,13 +1,13 @@
-# ~/~ begin <<docs/carbocat.md#src/Burgess2013/CA.jl>>[init]
+# ~/~ begin <<docs/carbocat-ca.md#src/Burgess2013/CA.jl>>[init]
 module CA
 
 using MindTheGap.Stencil
 
-# ~/~ begin <<docs/carbocat.md#cycle-permutation>>[init]
+# ~/~ begin <<docs/carbocat-ca.md#cycle-permutation>>[init]
 cycle_permutation(n_species::Int) =
     (circshift(1:n_species, x) for x in Iterators.countfrom(0))
 # ~/~ end
-# ~/~ begin <<docs/carbocat.md#burgess2013-rules>>[init]
+# ~/~ begin <<docs/carbocat-ca.md#burgess2013-rules>>[init]
 function rules(neighbourhood::Matrix{Int}, order::Vector{Int})
     cell_species = neighbourhood[3, 3]
     neighbour_count(species) = sum(neighbourhood .== species)

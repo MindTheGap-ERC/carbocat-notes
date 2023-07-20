@@ -1,4 +1,80 @@
-# ~/~ begin <<docs/carbocat-ca.md#src/figures/ca.jl>>[init]
+---
+title: Species Habitation
+subtitle: a cellular automaton
+---
+
+## Cellular Automaton
+The paper talks about cycling the order of preference for occupying an empty cell at each iteration. This means that the rules change slighly every iteration.
+
+``` {.julia #cycle-permutation}
+cycle_permutation(n_species::Int) =
+    (circshift(1:n_species, x) for x in Iterators.countfrom(0))
+```
+
+The `stencil` function has an `args...` variadic arguments that are forwarded to the given rule. This means we can create a `rules` function that we pass the preference order as a second argument.
+
+``` {.julia #burgess2013-rules}
+function rules(neighbourhood::Matrix{Int}, order::Vector{Int})
+    cell_species = neighbourhood[3, 3]
+    neighbour_count(species) = sum(neighbourhood .== species)
+    if cell_species == 0
+        for species in order
+            n = neighbour_count(species)
+            if 6 <= n && n <= 10
+                return species
+            end
+        end
+        0
+    else
+        n = neighbour_count(cell_species) - 1
+        (4 <= n && n <= 10 ? cell_species : 0)
+    end
+end
+```
+
+This function is not yet adaptible to the given rule set. Such a modification is not so hard to make. 
+
+The paper talks about a 50x50 grid initialized with uniform random values.
+
+``` {.julia file=src/Burgess2013/CA.jl}
+module CA
+
+using MindTheGap.Stencil
+
+<<cycle-permutation>>
+<<burgess2013-rules>>
+
+function run(::Type{B}, init::Matrix{Int}, n_species::Int) where {B <: Boundary{2}}
+    Channel{Matrix{Int}}() do ch
+        target = Matrix{Int}(undef, size(init))
+        put!(ch, init)
+        stencil_op = stencil(Int, B, (5, 5), rules)
+        for perm in cycle_permutation(n_species)
+            stencil_op(init, target, perm)
+            init, target = target, init
+            put!(ch, init)
+        end
+    end
+end
+
+end
+```
+
+First, let us reproduce Figure 3 in Burgess 2013.
+
+![First 8 generations](fig/burgess2013-fig3.svg)
+
+By eye comparison seems to indicate that this CA is working the same. I'm curious to the behaviour after more iterations. Let's try 10, 100, 1000 and so on.
+
+![Assymptotic behaviour](fig/burgess2013-long-times.svg)
+
+The little qualitative change between 100 and 1000 iterations would indicate that this CA remains "interesting" for a long time.
+
+On my laptop I can run about 150 iterations per second with current code. When using periodic boundaries, I get to 1500 iterations per second, which is peculiar. A lot can still be optimized.
+
+<details><summary>Plotting code</summary>
+
+``` {.julia file=src/figures/ca.jl}
 using MindTheGap.Burgess2013.CA
 using MindTheGap.Stencil: Reflected
 using MindTheGap.Utility
@@ -85,4 +161,31 @@ function plot_long_times(output::String)
                        ytics="set ytics 10, 10, 50")
     end
 end
-# ~/~ end
+```
+
+``` {.make file=figures.mk}
+.RECIPEPREFIX = >
+.PHONY: all _all
+
+fig := docs/fig
+
+all: _all
+
+<<build>>
+
+_all: $(targets)
+```
+
+``` {.make #build}
+targets += $(fig)/burgess2013-fig3.svg
+targets += $(fig)/burgess2013-long-times.svg
+
+docs/fig/burgess2013-fig3.svg: src/figures/ca.jl
+> julia --project=. -e 'include("$<"); plot("$@")'
+
+docs/fig/burgess2013-long-times.svg: src/figures/ca.jl
+> julia --project=. -e 'include("$<"); plot_long_times("$@")'
+```
+
+</details>
+

@@ -1,4 +1,5 @@
 - [reproducing Bosscher 1992](bosscher-1992.html)
+- [a cellular automaton](carbocat-ca.html)
 - [CarboCAT in Julia](carbocat.html)
 - [Sediment Transport](carbocat-transport.html)
 - [reading notes on Wood’s 2008 review](daisy-world.html)

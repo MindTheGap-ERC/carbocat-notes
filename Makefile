@@ -9,5 +9,5 @@ deploy-pages:
 > git checkout gh-pages; \
 > rsync -r site/* .; \
 > git commit -a -m 'deploy pages'; \
-> git push origin gh-pages
-
+> git push origin gh-pages; \
+> git checkout main

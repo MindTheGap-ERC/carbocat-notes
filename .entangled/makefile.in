@@ -69,7 +69,10 @@ $(target_dir)/fig/%: $(source_dir)/fig/%
 > @mkdir -p $(@D)
 > @cp $< $@
 
-$(target_dir)/%.html: $(source_dir)/%.md data/contents.md
+# The contents are order-only dependency, to prevent rebuilding
+# the entire site every time one page changes. In the end, contents
+# should be included dynamically through js.
+$(target_dir)/%.html: $(source_dir)/%.md | data/contents.md
 > @echo "Building site: $(@F)"
 > @mkdir -p $(@D)
 > @pandoc $(pandoc_args) -o $@ $<

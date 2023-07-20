@@ -21,6 +21,10 @@ The growth rate is
 
 ``` {.julia #carbonate-production}
 g(gₘ, I₀, Iₖ, k, w) = gₘ * tanh(I₀/Iₖ * exp(-w * k))
+```
+
+``` {.julia #b92-model}
+<<carbonate-production>>
 
 struct Parameters
      I₀::Float64
@@ -95,7 +99,7 @@ The use of water depth in both BS92 and B13 can be a bit confusing. Plots are sh
 
 [$$\partial_t h = -g_m {\rm tanh}\left[\frac{I_0}{I_k} \exp(-k (h - s(t)))\right].$$]{#eq:growth-eqn}
 
-``` {.julia #carbonate-production}
+``` {.julia #b92-model}
 function model(p::Parameters, s, t_end::Float64, h₀::Float64)
      ∂h(h::Float64, _, t::Float64) = let w = h - s(t)
           w >= 0.0 ? -g(p, h - s(t)) : 0.0
@@ -145,7 +149,7 @@ using CSV
 using DataFrames
 using Interpolations
 
-<<carbonate-production>>
+<<b92-model>>
 
 function sealevel_curve()
      data = DataFrame(CSV.File("data/bs92-sealevel-curve.csv"))

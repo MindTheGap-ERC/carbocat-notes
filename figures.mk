@@ -1,4 +1,4 @@
-# ~/~ begin <<docs/carbocat.md#figures.mk>>[init]
+# ~/~ begin <<docs/carbocat-ca.md#figures.mk>>[init]
 .RECIPEPREFIX = >
 .PHONY: all _all
 
@@ -6,7 +6,7 @@ fig := docs/fig
 
 all: _all
 
-# ~/~ begin <<docs/carbocat.md#build>>[init]
+# ~/~ begin <<docs/carbocat-ca.md#build>>[init]
 targets += $(fig)/burgess2013-fig3.svg
 targets += $(fig)/burgess2013-long-times.svg
 
