@@ -30,6 +30,7 @@ pandoc_args += --lua-filter $(script_dir)/include-contents.lua
 pandoc_args += --lua-filter $(script_dir)/details.lua
 pandoc_args += --lua-filter $(script_dir)/include.lua
 pandoc_args += --lua-filter $(script_dir)/tabs.lua
+pandoc_args += --lua-filter $(script_dir)/links.lua
 
 css := $(wildcard $(template_dir)/*.css)
 target_css := $(css:$(template_dir)/%.css=$(target_dir)/%.css)
