@@ -9,13 +9,14 @@ packages = [{include = "mind_the_gap"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+entangled-cli = "^2.0.0b2"
 
 
 [tool.poetry.group.dev.dependencies]
 mkdocs = "^1.4.3"
 mkdocs-material = "^9.1.9"
 mkdocs-entangled-plugin = "^0.2.0"
-entangled-cli = {path = "/home/johannes/Code/entangled/entangled.py", develop = true}
+entangled-cli = "2.0.0b3"
 
 [build-system]
 requires = ["poetry-core"]
