@@ -141,6 +141,8 @@ function openTab(evt, cityName) {
 <div class="col-3 col-s-6" id="contents">
 <ul>
 <li><a href="bosscher-1992.html">reproducing Bosscher 1992</a></li>
+<li><a href="carbocat-ca.html">a cellular automaton</a></li>
+<li><a href="carbocat-cpt.html">CA + production + transport</a></li>
 <li><a href="carbocat.html">CarboCAT in Julia</a></li>
 <li><a href="carbocat-transport.html">Sediment Transport</a></li>
 <li><a href="daisy-world.html">reading notes on Wood’s 2008
@@ -153,43 +155,153 @@ review</a></li>
 </ul>
 </div>
 <div class="col-6 col-s-9" id="main">
-<section id="notes" class="level1">
-<h1>Notes</h1>
+<section id="index" class="level1">
+<h1>Index</h1>
+<ul>
+<li><a href="./bosscher-1992.html">Carbonate Production</a> a
+reproduction of the Bosscher et al. ’92 result</li>
+<li><a href="./carbocat.html">CarboKitten (summary)</a> a Julia clone of
+CarboCAT
+<ul>
+<li><a href="./carbocat-ca.html">Cellular Automaton</a> the CA component
+of CarboKitten</li>
+<li><a href="./carbocat-transport.html">Transport</a> sediment
+transport</li>
+<li>Composite model:
+<ul>
+<li><a href="./carbocat-cpt.html">CA + Production + Transport</a></li>
+</ul></li>
+<li>Under the hood:
+<ul>
+<li><a href="./stencils.html">Stencil operations</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="project-notes" class="level1">
+<h1>Project notes</h1>
+<p>This repository contains a series of notes and code implementations
+for the Mind The Gap project. As products materialize from this, they
+should be moved to their own repository.</p>
+<section id="julia" class="level2">
+<h2>Julia</h2>
+<p>There is a <code>MindTheGap</code> Julia project in here. The best
+way to interact with code is by starting the Julia REPL.</p>
+<pre class="shell"><code>julia --project=.</code></pre>
+<p>or</p>
+<pre class="shell"><code>make repl</code></pre>
+<p>Then inside the REPL, first load <code>Revise</code>, then
+<code>MindTheGap</code>. <code>Revise</code> will keep your running
+image up-to-date with latests changes in the Julia code:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Revise</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap</span></span></code></pre></div>
+<p>You may also want to experiment with the code through Jupyter, see <a
+href="https://github.com/JuliaLang/IJulia.jl">IJulia</a> for
+instructions.</p>
+</section>
+<section id="entangled" class="level2">
+<h2>Entangled</h2>
+<p>All code in this repository is written using Entangled to synchronize
+source code with Markdown. To install Entangled run the following:</p>
+<pre class="shell"><code>pip --user install entangled-cli[rich]</code></pre>
+<p>Note, that the <code>[rich]</code> part is optional, it enables
+pretty coloured output on the terminal. When editing source files or
+Markdown, please remember to have the Entangled daemon running:</p>
+<pre class="shell"><code>entangled watch</code></pre>
+</section>
+<section id="project-layout" class="level2">
+<h2>Project layout</h2>
+<table>
+<thead>
+<tr class="header">
+<th>directory</th>
+<th>contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>./docs</code></td>
+<td>Markdown sources as well as generated figures.</td>
+</tr>
+<tr class="even">
+<td><code>./site</code></td>
+<td>Generated HTML pages.</td>
+</tr>
+<tr class="odd">
+<td><code>./data</code></td>
+<td>External data, some of it generated.</td>
+</tr>
+<tr class="even">
+<td><code>./src</code></td>
+<td>Julia source code, generated from the Markdown in
+<code>./docs</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>./test</code></td>
+<td>Unit tests.</td>
+</tr>
+<tr class="even">
+<td><code>./.entangled</code></td>
+<td>Additional files needed to generate HTML pages.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="building-pages" class="level2">
+<h2>Building pages</h2>
+<p>To build the HTML pages, you need <code>pandoc</code> installed, see
+<a href="https://pandoc.org/">pandoc.org</a>. To build the pages run</p>
+<pre class="shell"><code>make site</code></pre>
+</section>
+</section>
+<section id="scaffold" class="level1">
+<h1>Scaffold</h1>
 <p>These are project notes and exercises.</p>
 <div class="named-code-block">
 <div class="code-block-title">
 file:src/MindTheGap.jl
 </div>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> MindTheGap</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Stencil.jl&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Burgess2013.jl&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Utility.jl&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./RandomFields.jl&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./BS92.jl&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> MindTheGap</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Stencil.jl&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Burgess2013.jl&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./Utility.jl&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./RandomFields.jl&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">&quot;./BS92.jl&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div class="named-code-block">
 <div class="code-block-title">
 file:test/runtests.jl
 </div>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Test</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.Stencil</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.Utility</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">&quot;Mind The Gap tests&quot;</span> <span class="cf">begin</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;&lt;</span>spec<span class="op">&gt;&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Test</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.Stencil</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MindTheGap.Utility</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">&quot;Mind The Gap tests&quot;</span> <span class="cf">begin</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;&lt;</span>spec<span class="op">&gt;&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 </section>
 </div>
 
 <div id="menu" class="col-3 col-s-3 menu"><nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#notes" id="toc-notes">Notes</a></li>
+<li><a href="#index" id="toc-index">Index</a></li>
+<li><a href="#project-notes" id="toc-project-notes">Project notes</a>
+<ul>
+<li><a href="#julia" id="toc-julia">Julia</a></li>
+<li><a href="#entangled" id="toc-entangled">Entangled</a></li>
+<li><a href="#project-layout" id="toc-project-layout">Project
+layout</a></li>
+<li><a href="#building-pages" id="toc-building-pages">Building
+pages</a></li>
+</ul></li>
+<li><a href="#scaffold" id="toc-scaffold">Scaffold</a></li>
 </ul>
 </nav></div>
 </div>
