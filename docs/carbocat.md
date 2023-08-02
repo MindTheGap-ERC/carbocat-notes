@@ -60,6 +60,8 @@ include("Burgess2013/CA.jl")
 include("Burgess2013/Production.jl")
 include("Burgess2013/Transport.jl")
 
+<<carbocat-composite>>
+
 end
 ```
 

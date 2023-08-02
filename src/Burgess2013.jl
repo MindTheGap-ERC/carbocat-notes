@@ -27,5 +27,8 @@ include("Burgess2013/CA.jl")
 include("Burgess2013/Production.jl")
 include("Burgess2013/Transport.jl")
 
+# ~/~ begin <<docs/carbocat-cpt.md#carbocat-composite>>[init]
+# ~/~ end
+
 end
 # ~/~ end

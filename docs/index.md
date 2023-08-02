@@ -3,7 +3,20 @@ title: CarboKitten
 subtitle: project notes
 ---
 
-# Notes
+# Index
+
+- [Carbonate Production](./bosscher-1992.md) a reproduction of the Bosscher et al. '92 result
+- [CarboKitten (summary)](./carbocat.md) a Julia clone of CarboCAT
+  - [Cellular Automaton](./carbocat-ca.md) the CA component of CarboKitten
+  - [Transport](./carbocat-transport.md) sediment transport
+  - Composite model:
+    - [CA + Production + Transport](./carbocat-cpt.md)
+  - Under the hood:
+    - [Stencil operations](./stencils.md)
+
+!include README.md
+
+# Scaffold
 
 These are project notes and exercises.
 

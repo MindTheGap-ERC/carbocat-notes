@@ -14,5 +14,11 @@ Iₖ(s::Species) = s.saturation_intensity
 k(s::Species) = s.extinction_coefficient
 gₘ(s::Species) = s.maximum_growth_rate
 
+model1 = [
+    Species((4, 10), (6, 10), 500, 0.8, 300),
+    Species((4, 10), (6, 10), 400, 0.1, 300),
+    Species((4, 10), (6, 10), 100, 0.005, 300)
+]
+
 end
 # ~/~ end
