@@ -1,6 +1,22 @@
 # ~/~ begin <<docs/carbocat-transport.md#src/Burgess2013/Transport.jl>>[init]
+module Transport
+
 using MindTheGap.Stencil
 using Transducers
+
+struct Product
+    species::Int
+    amount::Float64
+end
+
+Base.zero(::Type{Product}) = Product(0, 0.0)
+
+struct Deposit{N}
+    amount::NTuple{N, Float64}
+end
+
+Base.zero(::Type{Deposit{N}}) where {N} =
+    Deposit{N}(ntuple(_ -> zero(Float64), N))
 
 function deposit(
         ::Type{B},
@@ -10,7 +26,7 @@ function deposit(
         lim::Float64,
         idx::CartesianIndex,
         p::Product
-    ) where {B <: Boundary{2}}
+    ) where {B <: Boundary{2}, N}
 
     if p.amount <= lim
         transported[idx][p.species] += p.amount
@@ -30,7 +46,6 @@ function deposit(
         transported[idx][p.species] += p.amount
         return
     end
-
     transported[idx][p.species] += p.amount / 2
     for j in targets
         q = Product(p.species, p.amount / (2 * length(targets)))
@@ -48,16 +63,18 @@ function transport(
     ) where {B <: Boundary{2}}
 
     shape = size(production)
-    transported = zeros(Transported{n_species})
+    result = zeros(Transported{n_species})
 
     for i in CartesianIndices(shape)
         production[i].amount <= lim && continue
-        p = production[i]
-        transported[i][p.species] += p.amount * (1.0 - fraction)
+        p = copy(production[i])
         p.amount *= fraction
-        deposit(B, production, elevation, transported, lim, i, p)
+        production[i].amount -= p.amount
+        deposit(B, production, elevation, result, lim, i, p)
     end
 
     return result
+end
+
 end
 # ~/~ end
