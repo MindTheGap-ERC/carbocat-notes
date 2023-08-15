@@ -5,7 +5,7 @@ using Plots
 function main()
      h0 = LinRange(0, 200, 101)
      result = hcat([BS92.model(BS92.SCENARIO_A, h).u for h in h0]...)
-     t = LinRange(0, 80_000, 81)
+     t = LinRange(0, 80000, 81)
 
      plotlyjs()
 
@@ -27,6 +27,8 @@ function main()
           subplot=2,
           framestyle=:box)
 
-     savefig("docs/fig/bs92-fig8.html")
+     #savefig("docs/fig/bs92-fig8.html")
 end
+
+main()
 # ~/~ end
