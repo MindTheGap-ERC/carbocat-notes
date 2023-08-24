@@ -15,7 +15,7 @@ struct Parameters
 end
 
 g(p::Parameters, w) = g(p.gₘ, p.I₀, p.Iₖ, p.k, w)
-param = Parameters(2000.0, 250.0, 0.05, 0.005)
+
 
 function sealevel_curve()
     data = DataFrame(CSV.File("data/bs92-sealevel-curve.csv"))
@@ -24,17 +24,20 @@ end
 
 function erosion()
     dis_const2 = 0.007
-    e = 0.001 * dis_const2 * 1000
+    e1 = 0.001 * dis_const2 * 1000 * 0
+    #e2 = 
 end
 
-function model(p::Parameters,s,e,t_end::Float64, h₀::Float64)
-    let w = h - s(t)
-        if w >= 0.0
-            -g(p, h - s(t)) 
-        elseif h - e >= h₀
-            -e
-        else
-            -(h - s(t))
+
+function model(p::Parameters,s,t_end::Float64, h₀::Float64)
+    e = erosion()
+    function ∂h(h, _, t)
+        let w = h - s(t) + 0.005 * t
+            if w > 0.0 
+                -g(p, w) 
+            else
+                min(e,h₀ - h)
+            end
         end
     end
     ode = ODEProblem(∂h, h₀, (0.0, t_end), Nothing)
@@ -47,13 +50,14 @@ struct Scenario
     t_end::Float64
 end
 
-model(s::Scenario, h₀::Float64) = model(s.param, s.sealevel, s.t_end, h₀)
+model(s::Scenario, h₀::Float64) = model(s.param, s.sealevel, s.t_end, h₀::Float64)
 
 SCENARIO_A = Scenario(
     Parameters(2000.0, 250.0, 0.05, 0.005),
     sealevel_curve(),
-    80_000.0)
-end 
+    80_000.0,
+    )
+ 
 
 
 using Plots
@@ -82,17 +86,17 @@ using Plots
           subplot=2,
           framestyle=:box)
 
-          plot!(t,-result[:,10],
+          plot!(t,result[:,10],
           legend_position=:none,
           title="strati-ele with time",
           xaxis=("time (years)"),
-          yaxis=("stratigraphy height (m)", :right),
+          yaxis=("stratigraphy height (m)", :flip),
           inset=(1, bbox(0.61, 0.60, 0.45, 0.28)),
           subplot=3,
           framestyle=:box)
 
      #plot(result,t)
      #savefig("docs/fig/bs92-fig8.html")
-end
 
-main()    
+
+#main()    
