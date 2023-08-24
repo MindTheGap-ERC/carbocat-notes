@@ -1,5 +1,4 @@
 # rednoise sealevel
-module 
 using SignalAnalysis
 using Plots
 using CSV, Tables, DataFrames
